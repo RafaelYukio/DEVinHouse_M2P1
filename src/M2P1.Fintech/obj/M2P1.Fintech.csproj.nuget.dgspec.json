@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Pichau\\Documents\\M2P1\\M2P1\\src\\M2P1.Fintech\\M2P1.Fintech.csproj": {}
+    "C:\\Users\\Pichau\\Documents\\M2P1\\DEVinHouse_M2P1\\src\\M2P1.Fintech\\M2P1.Fintech.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Pichau\\Documents\\M2P1\\M2P1\\src\\M2P1.Fintech\\M2P1.Fintech.csproj": {
+    "C:\\Users\\Pichau\\Documents\\M2P1\\DEVinHouse_M2P1\\src\\M2P1.Fintech\\M2P1.Fintech.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Pichau\\Documents\\M2P1\\M2P1\\src\\M2P1.Fintech\\M2P1.Fintech.csproj",
+        "projectUniqueName": "C:\\Users\\Pichau\\Documents\\M2P1\\DEVinHouse_M2P1\\src\\M2P1.Fintech\\M2P1.Fintech.csproj",
         "projectName": "M2P1.Fintech",
-        "projectPath": "C:\\Users\\Pichau\\Documents\\M2P1\\M2P1\\src\\M2P1.Fintech\\M2P1.Fintech.csproj",
+        "projectPath": "C:\\Users\\Pichau\\Documents\\M2P1\\DEVinHouse_M2P1\\src\\M2P1.Fintech\\M2P1.Fintech.csproj",
         "packagesPath": "C:\\Users\\Pichau\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Pichau\\Documents\\M2P1\\M2P1\\src\\M2P1.Fintech\\obj\\",
+        "outputPath": "C:\\Users\\Pichau\\Documents\\M2P1\\DEVinHouse_M2P1\\src\\M2P1.Fintech\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Pichau\\AppData\\Roaming\\NuGet\\NuGet.Config",

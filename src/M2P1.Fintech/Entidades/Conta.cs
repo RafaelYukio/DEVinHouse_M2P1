@@ -33,13 +33,13 @@ namespace M2P1.Fintech.Entidades
         public void Saque(decimal valor)
         {
             Historico.Add(AdicionarTransacao(TipoTransacaoEnum.Receita, "Saque", valor));
-            ValorSaldo += valor;
+            ValorSaldo -= valor;
         }
 
         public void Deposito(decimal valor)
         {
             Historico.Add(AdicionarTransacao(TipoTransacaoEnum.Despesa, "Deposito", valor));
-            ValorSaldo -= valor;
+            ValorSaldo += valor;
         }
 
         public void Saldo()
