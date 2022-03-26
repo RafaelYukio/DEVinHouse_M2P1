@@ -14,4 +14,9 @@ namespace M2P1.Fintech.Enums
     {
         Receita, Despesa, Transferencia
     }
+
+    public enum TransferenciaEnum
+    {
+        Origem, Destino
+    }
 }

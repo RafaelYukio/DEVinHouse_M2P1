@@ -7,5 +7,6 @@ namespace M2P1.Fintech.Interfaces
         public void AdicionarDado(T dado);
         public void ApagarDado(string id);
         public T RetornarDado(string id);
+        public IList<T> RetornarDados();
     }
 }

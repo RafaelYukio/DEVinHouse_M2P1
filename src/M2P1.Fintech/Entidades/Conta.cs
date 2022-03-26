@@ -24,42 +24,37 @@ namespace M2P1.Fintech.Entidades
             Historico = new List<Transacao>();
         }
 
-        private Transacao AdicionarTransacao(TipoTransacaoEnum tipoTransacao, string descricao, decimal valor)
-        {
-            Transacao transacao = new Transacao(tipoTransacao, descricao, valor);
-            return transacao;
-        }
-
         public void Saque(decimal valor)
         {
-            Historico.Add(AdicionarTransacao(TipoTransacaoEnum.Receita, "Saque", valor));
             ValorSaldo -= valor;
         }
 
         public void Deposito(decimal valor)
         {
-            Historico.Add(AdicionarTransacao(TipoTransacaoEnum.Despesa, "Deposito", valor));
             ValorSaldo += valor;
         }
 
-        public void Saldo()
-        {
+        public decimal Saldo() => ValorSaldo;
 
+        public IList<Transacao> Extrato() => Historico;
+
+        public void Transferencia(TransferenciaEnum caminho, decimal valor)
+        {
+            if (caminho == TransferenciaEnum.Origem)
+            {
+                ValorSaldo -= valor;
+            }
+            if (caminho == TransferenciaEnum.Destino)
+            {
+                ValorSaldo += valor;
+            }
         }
 
-        public void Extrato()
+        public void Dados(string endereco, decimal rendaMensal, AgenciaEnum agencia)
         {
-
-        }
-
-        public void Transferencia()
-        {
-
-        }
-
-        public void AlterarDados()
-        {
-
+            Endereco = endereco;
+            RendaMensal = rendaMensal;
+            Agencia = agencia;
         }
 
     }
