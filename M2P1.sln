@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32319.34
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M2P1.Fintech", "src\M2P1.Fintech\M2P1.Fintech.csproj", "{C6B7C162-AA2D-40A1-818B-AB0AA6C727EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M2P1.FintechApp", "src\M2P1.FintechApp\M2P1.FintechApp.csproj", "{77026816-CF88-4A70-8D25-1B9FEDD6AEF8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C6B7C162-AA2D-40A1-818B-AB0AA6C727EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6B7C162-AA2D-40A1-818B-AB0AA6C727EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6B7C162-AA2D-40A1-818B-AB0AA6C727EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6B7C162-AA2D-40A1-818B-AB0AA6C727EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77026816-CF88-4A70-8D25-1B9FEDD6AEF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77026816-CF88-4A70-8D25-1B9FEDD6AEF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77026816-CF88-4A70-8D25-1B9FEDD6AEF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77026816-CF88-4A70-8D25-1B9FEDD6AEF8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {86FE672C-417D-4C8C-A8AA-8231CFB872FA}
+	EndGlobalSection
+EndGlobal

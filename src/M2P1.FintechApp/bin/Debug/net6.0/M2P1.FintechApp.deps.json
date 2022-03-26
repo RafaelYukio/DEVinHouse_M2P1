@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "M2P1.FintechApp/1.0.0": {
+        "dependencies": {
+          "M2P1.Fintech": "1.0.0"
+        },
+        "runtime": {
+          "M2P1.FintechApp.dll": {}
+        }
+      },
+      "M2P1.Fintech/1.0.0": {
+        "runtime": {
+          "M2P1.Fintech.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "M2P1.FintechApp/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "M2P1.Fintech/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
