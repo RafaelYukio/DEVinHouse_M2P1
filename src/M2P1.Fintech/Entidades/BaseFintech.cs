@@ -10,5 +10,6 @@ namespace M2P1.Fintech.Entidades
     {
         public string Id { get; private set; }
         protected BaseFintech(string id) => Id = id;
+        protected BaseFintech() { }
     }
 }

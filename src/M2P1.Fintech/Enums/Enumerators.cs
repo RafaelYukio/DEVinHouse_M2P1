@@ -12,7 +12,7 @@ namespace M2P1.Fintech.Enums
     }
     public enum TipoTransacaoEnum
     {
-        Receita, Despesa, Transferencia
+        Saque, Deposito, Transferencia
     }
 
     public enum TransferenciaEnum

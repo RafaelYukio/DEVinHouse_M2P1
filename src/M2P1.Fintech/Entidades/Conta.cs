@@ -38,22 +38,24 @@ namespace M2P1.Fintech.Entidades
 
         public IList<Transacao> Extrato() => Historico;
 
-        public void Transferencia(TransferenciaEnum caminho, decimal valor)
+        public void Transferencia(TransferenciaEnum tipo, decimal valor)
         {
-            if (caminho == TransferenciaEnum.Origem)
+            if (tipo == TransferenciaEnum.Origem)
             {
                 ValorSaldo -= valor;
             }
-            if (caminho == TransferenciaEnum.Destino)
+            if (tipo == TransferenciaEnum.Destino)
             {
                 ValorSaldo += valor;
             }
         }
 
-        public void Dados(string endereco, decimal rendaMensal, AgenciaEnum agencia)
+        public void Dados(string nome, string endereco, decimal rendaMensal, int contaNumero, AgenciaEnum agencia)
         {
+            Nome = nome;
             Endereco = endereco;
             RendaMensal = rendaMensal;
+            ContaNumero = contaNumero;
             Agencia = agencia;
         }
 
