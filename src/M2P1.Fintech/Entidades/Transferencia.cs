@@ -11,7 +11,6 @@ namespace M2P1.Fintech.Entidades
         {
             DadosContaOrigem = dadosContaOrigem;
             DadosContaDestino = dadosContaDestino;
-
         }
     }
 }

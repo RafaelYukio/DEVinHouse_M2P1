@@ -11,7 +11,6 @@ namespace M2P1.Fintech.Repositories
             Conta conta = RetornarDado(id);
             conta.Historico.Add(transacao);
         }
-
         public decimal RetornarSaldo(string id) => RetornarDado(id).Saldo();
 
         public IList<Transacao> RetornarExtrato(string id) => RetornarDado(id).Extrato();

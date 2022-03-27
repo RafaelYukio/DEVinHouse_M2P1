@@ -24,7 +24,7 @@ var _fintechApp = new FuncoesFintech(_ContaRepository, _TransferenciaRepository)
 #endregion
 
 _fintechApp.CriarContaPoupanca("1", "Rafael", "333", "Aqui", 1000, AgenciaEnum.Florianopolis);
-_fintechApp.CriarContaPoupanca("2", "José", "444", "Ali", 2000, AgenciaEnum.Biguacu);
+_fintechApp.CriarContaInvestimento("2", "José", "444", "Ali", 2000, AgenciaEnum.Biguacu);
 _fintechApp.CriarContaCorrente("3", "Ele", "555", "Lugar", 3000, AgenciaEnum.SaoJose);
 
 Console.WriteLine("------------------------------------------");
@@ -33,35 +33,12 @@ _fintechApp.RetornarContas();
 
 Console.WriteLine("------------------------------------------");
 
-_fintechApp.AdicionarTransacaoConta("1", TipoTransacaoEnum.Deposito, 1000);
-_fintechApp.AdicionarTransacaoConta("2", TipoTransacaoEnum.Deposito, 1000);
-_fintechApp.AdicionarTransacaoConta("3", TipoTransacaoEnum.Deposito, 1000);
+_fintechApp.AplicarPoupanca("1", 1000);
+_fintechApp.AplicarLCI("2", 1000);
+_fintechApp.AplicarLCA("2", 2000);
+_fintechApp.AplicarCDB("2", 3000);
+_fintechApp.DepositoConta("3", 5000);
 
 Console.WriteLine("------------------------------------------");
 
 _fintechApp.RetornarContas();
-
-Console.WriteLine("------------------------------------------");
-
-_fintechApp.AdicionarTransacaoConta("1", TipoTransacaoEnum.Deposito, 500);
-_fintechApp.AdicionarTransacaoConta("2", TipoTransacaoEnum.Saque, 200);
-_fintechApp.AdicionarTransacaoConta("3", TipoTransacaoEnum.Saque, 1200);
-
-Console.WriteLine("------------------------------------------");
-
-_fintechApp.RetornarContas();
-
-Console.WriteLine("------------------------------------------");
-
-_fintechApp.AdicionarTransferencia("1", "2", 500);
-
-Console.WriteLine("------------------------------------------");
-
-_fintechApp.AplicarRendimento("1");
-_fintechApp.RetornarContas();
-
-Console.WriteLine("------------------------------------------");
-
-_fintechApp.RetornarContas();
-_fintechApp.RetornarTransferencias();
-

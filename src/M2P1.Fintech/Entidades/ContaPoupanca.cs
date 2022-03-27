@@ -4,15 +4,47 @@ namespace M2P1.Fintech.Entidades
 {
     public class ContaPoupanca : Conta
     {
-        public decimal ValorRendimento { get; private set; }        public ContaPoupanca(string id, string nome, string cpf, string endereco, decimal rendaMensal, AgenciaEnum agencia)
+        public decimal ValorRendimentoPoupanca { get; private set; }
+        public decimal ValorAplicacoPoupanca { get; private set; }
+        public ContaPoupanca(string id, string nome, string cpf, string endereco, decimal rendaMensal, AgenciaEnum agencia)
             : base(id, nome, cpf, endereco, rendaMensal, agencia)
         {
             TipoConta = TipoContaEnum.Poupanca;
-            ValorRendimento = 1.05M;
+            ValorRendimentoPoupanca = 1.005M;
+            ValorAplicacoPoupanca = 0;
         }
-        public void Rendimento()
+
+        private decimal SimulacaoRendimentoPorMes(DateOnly dataResgate, decimal valorRendimento)
         {
-            ValorSaldo = Decimal.Multiply(ValorSaldo, ValorRendimento);
+            decimal rendimentoTotal = 1.00M;
+
+            DateTime dataHoje = DateTime.Now;
+            DateTime dataRetirada = dataResgate.ToDateTime(new TimeOnly(0, 0));
+
+            int meses = ((dataRetirada.Year - dataHoje.Year) * 12) + dataRetirada.Month - dataHoje.Month;
+
+            for (int i = 0; i < meses; i++)
+            {
+                rendimentoTotal = Decimal.Multiply(rendimentoTotal, valorRendimento);
+            }
+
+            return rendimentoTotal;
+
         }
+        public decimal SimulacaoRendimento(decimal valor, DateOnly dataResgate) => Decimal.Multiply(valor, SimulacaoRendimentoPorMes(dataResgate, ValorRendimentoPoupanca));
+
+        public void AplicarPoupanca(decimal valor)
+        {
+            ValorAplicacoPoupanca += valor;
+        }
+
+        public void ResgatarPoupanca(decimal valor)
+        {
+            ValorAplicacoPoupanca -= valor;
+        }
+
+        public decimal ValorPoupanca() => ValorAplicacoPoupanca;
+
+
     }
 }

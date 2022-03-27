@@ -16,6 +16,10 @@ namespace M2P1.Fintech.Enums
     }
     public enum TipoTransacaoEnum
     {
-        Saque, Deposito, Transferencia
+        Saque, Deposito, Transferencia, Aplicacao, Resgate
+    }
+    public enum TipoAplicacoEnum
+    {
+        LCI, LCA, CDB, Poupanca
     }
 }
