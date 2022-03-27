@@ -31,7 +31,7 @@ namespace M2P1.Fintech.Entidades
             return rendimentoTotal;
 
         }
-        public decimal SimulacaoRendimento(decimal valor, DateOnly dataResgate) => Decimal.Multiply(valor, SimulacaoRendimentoPorMes(dataResgate, ValorRendimentoPoupanca));
+        public decimal SimulacaoRendimento(decimal valor, DateOnly dataResgate, decimal rendimento) => Decimal.Multiply(valor, SimulacaoRendimentoPorMes(dataResgate, rendimento));
 
         public void AplicarPoupanca(decimal valor)
         {

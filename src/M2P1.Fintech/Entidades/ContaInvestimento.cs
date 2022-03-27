@@ -23,26 +23,31 @@ namespace M2P1.Fintech.Entidades
             ValorAplicacoCDB = 0;
         }
 
-        private decimal SimulacaoRendimentoPorDia(DateOnly dataResgate, decimal valorRendimento)
+        private decimal SimulacaoRendimentoPorDia(DateOnly dataAplicacao, DateOnly dataResgate, decimal valorRendimento)
         {
             decimal rendimentoTotal = 1.00M;
 
-            DateTime dataHoje = DateTime.Now;
+            DateTime dataAplicada = dataAplicacao.ToDateTime(new TimeOnly(0, 0));
             DateTime dataRetirada = dataResgate.ToDateTime(new TimeOnly(0, 0));
 
-            int dias = (dataRetirada.Date - dataHoje.Date).Days;
+            decimal dias = (dataRetirada.Date - dataAplicada.Date).Days;
+            decimal anos = Math.Truncate(dias / 365);
 
-            for (int i = 0; i < dias; i++)
+            dias = (dias / 365) - anos;
+
+            for (int i = 0; i < anos; i++)
             {
-                rendimentoTotal = Decimal.Multiply(rendimentoTotal, valorRendimento / 365);
+                rendimentoTotal = Decimal.Multiply(rendimentoTotal, valorRendimento);
             }
+
+            rendimentoTotal = rendimentoTotal + valorRendimento * dias;
 
             return rendimentoTotal;
 
         }
-        public decimal SimulacaoRendimentoLCI(decimal valor, DateOnly dataResgate) => Decimal.Multiply(valor, SimulacaoRendimentoPorDia(dataResgate, ValorRendimentoLCI));
-        public decimal SimulacaoRendimentoLCA(decimal valor, DateOnly dataResgate) => Decimal.Multiply(valor, SimulacaoRendimentoPorDia(dataResgate, ValorRendimentoLCA));
-        public decimal SimulacaoRendimentoCDB(decimal valor, DateOnly dataResgate) => Decimal.Multiply(valor, SimulacaoRendimentoPorDia(dataResgate, ValorRendimentoCDB));
+        public decimal SimulacaoRendimentoLCI(decimal valor, DateOnly dataAplicacao, DateOnly dataResgate) => Decimal.Multiply(valor, SimulacaoRendimentoPorDia(dataAplicacao, dataResgate, ValorRendimentoLCI));
+        public decimal SimulacaoRendimentoLCA(decimal valor, DateOnly dataAplicacao, DateOnly dataResgate) => Decimal.Multiply(valor, SimulacaoRendimentoPorDia(dataAplicacao, dataResgate, ValorRendimentoLCA));
+        public decimal SimulacaoRendimentoCDB(decimal valor, DateOnly dataAplicacao, DateOnly dataResgate) => Decimal.Multiply(valor, SimulacaoRendimentoPorDia(dataAplicacao, dataResgate, ValorRendimentoCDB));
 
         public void AplicarLCI(decimal valor)
         {

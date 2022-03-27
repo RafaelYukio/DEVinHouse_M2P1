@@ -42,3 +42,9 @@ _fintechApp.DepositoConta("3", 5000);
 Console.WriteLine("------------------------------------------");
 
 _fintechApp.RetornarContas();
+
+Console.WriteLine("------------------------------------------");
+
+_fintechApp.SimularRendimentoPoupanca("1", 1000, DateOnly.FromDateTime(DateTime.Now.AddDays(300)), 1.005M);
+
+_fintechApp.SimularRendimentoLCI("2", 1000, DateOnly.FromDateTime(DateTime.Now), DateOnly.FromDateTime(DateTime.Now.AddDays(731)));

@@ -15,12 +15,13 @@ namespace M2P1.Fintech.Entidades
 
         public void UsoChequeEspecial(decimal valor)
         {
-            ValorChequeEspecial = ValorChequeEspecial - valor;
+            ValorChequeEspecial -= valor;
         }
 
         public void PagoChequeEspecial(decimal valor)
         {
-            ValorChequeEspecial = ValorChequeEspecial + valor;
+            ValorChequeEspecial += valor;
         }
+        public decimal LimiteChequeEspecial() => ValorChequeEspecial;
     }
 }
