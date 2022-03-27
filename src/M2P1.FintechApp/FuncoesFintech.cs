@@ -65,7 +65,6 @@ namespace M2P1.FintechApp
                     {
                         Console.WriteLine("Limite do saldo ultrapassado!");
                     }
-
                 }
             }
 
@@ -119,7 +118,6 @@ namespace M2P1.FintechApp
 
         public void AplicarRendimento(string id)
         {
-
             dynamic conta = _contaRepository.RetornarDado(id);
             conta.Rendimento();
 
@@ -128,15 +126,15 @@ namespace M2P1.FintechApp
 
         public void RetornarContas()
         {
-            Console.WriteLine("Todas as contas:");
-
             IList<Conta> list = _contaRepository.RetornarDados();
+
+            Console.WriteLine("Todas as contas:");
+            Console.WriteLine(String.Format("|{0,-20}|{1,-20}|{2,-20}|{3,-20}|", "Tipo de conta", "Nome", "Endereço", "Saldo"));
 
             foreach (Conta conta in list)
             {
-                Console.WriteLine($"Nome: {conta.Nome}, Endereco: {conta.Endereco}, Saldo: {conta.Saldo()}");
+                Console.WriteLine(String.Format("|{0,-20}|{1,-20}|{2,-20}|{3,-20}|", conta.TipoConta, conta.Nome, conta.Endereco, conta.Saldo()));
             }
-
         }
 
         public void RetornarTransferencias()
@@ -149,7 +147,6 @@ namespace M2P1.FintechApp
             {
                 Console.WriteLine($"Origem: {transferencia.DadosContaOrigem.Nome}, Destino: {transferencia.DadosContaDestino.Nome}, Valor: {transferencia.Valor}");
             }
-
         }
     }
 }
