@@ -4,13 +4,14 @@ namespace M2P1.Fintech.Entidades
 {
     public abstract class Conta : BaseFintech
     {
+        public TipoContaEnum TipoConta { get; protected set; }
         public string Nome { get; private set; }
         public string CPF { get; private set; }
         public string Endereco { get; private set; }
         public decimal RendaMensal { get; private set; }
         public int ContaNumero { get; private set; }
         public AgenciaEnum Agencia { get; private set; }
-        public decimal ValorSaldo { get; private set; }
+        public decimal ValorSaldo { get; protected set; }
         public IList<Transacao> Historico { get; private set; }
 
         protected Conta(string id, string nome, string cpf, string endereco, decimal rendaMensal, AgenciaEnum agencia) : base(id)
@@ -37,18 +38,6 @@ namespace M2P1.Fintech.Entidades
         public decimal Saldo() => ValorSaldo;
 
         public IList<Transacao> Extrato() => Historico;
-
-        public void Transferencia(TransferenciaEnum tipo, decimal valor)
-        {
-            if (tipo == TransferenciaEnum.Origem)
-            {
-                ValorSaldo -= valor;
-            }
-            if (tipo == TransferenciaEnum.Destino)
-            {
-                ValorSaldo += valor;
-            }
-        }
 
         public void Dados(string nome, string endereco, decimal rendaMensal, int contaNumero, AgenciaEnum agencia)
         {

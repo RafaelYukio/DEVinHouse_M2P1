@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace M2P1.Fintech.Enums
 {
+    public enum TipoContaEnum
+    {
+        Corrente, Poupanca, Investimento
+    }
     public enum AgenciaEnum
     {
         Florianopolis = 001, SaoJose = 002, Biguacu = 003
@@ -13,10 +17,5 @@ namespace M2P1.Fintech.Enums
     public enum TipoTransacaoEnum
     {
         Saque, Deposito, Transferencia
-    }
-
-    public enum TransferenciaEnum
-    {
-        Origem, Destino
     }
 }

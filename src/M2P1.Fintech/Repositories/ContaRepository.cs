@@ -6,7 +6,6 @@ namespace M2P1.Fintech.Repositories
 {
     public class ContaRepository : BaseRepository<Conta>, IContaRepository
     {
-
         public void AdicionarTransacao(string id, Transacao transacao)
         {
             Conta conta = RetornarDado(id);
@@ -22,6 +21,5 @@ namespace M2P1.Fintech.Repositories
             Conta conta = RetornarDado(id);
             conta.Dados(nome, endereco, rendaMensal, contaNumero, agencia);
         }
-
     }
 }
