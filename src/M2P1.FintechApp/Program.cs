@@ -26,6 +26,8 @@ var _fintechApp = new FuncoesFintech(_ContaRepository, _TransferenciaRepository)
 _fintechApp.CriarContaPoupanca("1", "Rafael", "333", "Aqui", 1000, AgenciaEnum.Florianopolis);
 _fintechApp.CriarContaInvestimento("2", "José", "444", "Ali", 2000, AgenciaEnum.Biguacu);
 _fintechApp.CriarContaCorrente("3", "Ele", "555", "Lugar", 3000, AgenciaEnum.SaoJose);
+_fintechApp.CriarContaCorrente("4", "Ele", "555", "Lugar", 3000, AgenciaEnum.SaoJose);
+_fintechApp.CriarContaCorrente("5", "Ele", "555", "Lugar", 3000, AgenciaEnum.SaoJose);
 
 Console.WriteLine("------------------------------------------");
 
@@ -42,9 +44,44 @@ _fintechApp.DepositoConta("3", 5000);
 Console.WriteLine("------------------------------------------");
 
 _fintechApp.RetornarContas();
+_fintechApp.RetornarTotalInvestido();
 
 Console.WriteLine("------------------------------------------");
 
 _fintechApp.SimularRendimentoPoupanca("1", 1000, DateOnly.FromDateTime(DateTime.Now.AddDays(300)), 1.005M);
 
 _fintechApp.SimularRendimentoLCI("2", 1000, DateOnly.FromDateTime(DateTime.Now), DateOnly.FromDateTime(DateTime.Now.AddDays(731)));
+
+_fintechApp.SimularRendimentoLCA("2", 1000, DateOnly.FromDateTime(DateTime.Now), DateOnly.FromDateTime(DateTime.Now.AddDays(731)));
+
+_fintechApp.SimularRendimentoCDB("2", 1000, DateOnly.FromDateTime(DateTime.Now), DateOnly.FromDateTime(DateTime.Now.AddDays(731)));
+
+_fintechApp.RetornarTransacoesConta("2");
+
+_fintechApp.ResgatarLCA("2", 1000);
+
+Console.WriteLine("------------------------------------------");
+
+_fintechApp.RetornarContas();
+
+_fintechApp.RetornarTransacoesConta("2");
+
+_fintechApp.RetornarContasPorTipo(typeof(ContaInvestimento));
+
+_fintechApp.RetornarContasSaldoNegativo();
+
+Console.WriteLine("------------------------------------------");
+
+_fintechApp.SaqueConta("3", 3000);
+
+_fintechApp.RetornarContas();
+
+_fintechApp.SaqueConta("3", 3000);
+
+_fintechApp.RetornarContas();
+
+_fintechApp.SaqueConta("3", 2200);
+
+_fintechApp.RetornarContasSaldoNegativo();
+
+_fintechApp.RetornarContas();

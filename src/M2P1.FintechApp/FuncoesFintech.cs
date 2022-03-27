@@ -168,6 +168,24 @@ namespace M2P1.FintechApp
             Console.WriteLine($"Rendimento simulado na conta numero {id}, valor de {valorSimulacaoRendimentoLCI}");
         }
 
+        public void SimularRendimentoLCA(string id, decimal valor, DateOnly dataAplicacao, DateOnly dataResgate)
+        {
+            dynamic conta = _contaRepository.RetornarDado(id);
+
+            decimal valorSimulacaoRendimentoLCA = conta.SimulacaoRendimentoLCA(valor, dataAplicacao, dataResgate);
+
+            Console.WriteLine($"Rendimento simulado na conta numero {id}, valor de {valorSimulacaoRendimentoLCA}");
+        }
+
+        public void SimularRendimentoCDB(string id, decimal valor, DateOnly dataAplicacao, DateOnly dataResgate)
+        {
+            dynamic conta = _contaRepository.RetornarDado(id);
+
+            decimal valorSimulacaoRendimentoCDB = conta.SimulacaoRendimentoCDB(valor, dataAplicacao, dataResgate);
+
+            Console.WriteLine($"Rendimento simulado na conta numero {id}, valor de {valorSimulacaoRendimentoCDB}");
+        }
+
         public void AplicarLCI(string id, decimal valor)
         {
             dynamic conta = _contaRepository.RetornarDado(id);
@@ -281,8 +299,12 @@ namespace M2P1.FintechApp
                 {
                     Console.WriteLine($"Tipo: {transacao.TipoTransacao}, Descrição: {transacao.Descricao}, Valor: {transacao.Valor}, Destinho: {transacao.DadosContaDestino.Nome}, Data: {transacao.Data}");
                 }
-
+                if (transacao.GetType() == typeof(Investimento))
+                {
+                    Console.WriteLine($"Tipo: {transacao.TipoTransacao}, Descrição: {transacao.Descricao}, Valor: {transacao.Valor}, Tipo: {transacao.TipoAplicacao}, Data Aplicacão: {transacao.DataAplicacao}, Data Resgate: {transacao.DataResgate}");
+                }
             }
+
         }
 
         public void RetornarTransferencias()
@@ -296,5 +318,37 @@ namespace M2P1.FintechApp
                 Console.WriteLine($"Origem: {transferencia.DadosContaOrigem.Nome}, Destino: {transferencia.DadosContaDestino.Nome}, Valor: {transferencia.Valor}");
             }
         }
+
+        public void RetornarContasPorTipo(Type tipoConta)
+        {
+            Console.WriteLine("Todas as contas tipo:");
+
+            IList<Conta> list = _contaRepository.RetornarContasPorTipo(tipoConta);
+
+            foreach (Conta conta in list)
+            {
+                Console.WriteLine($"Conta de Id: {conta.Id}, em nome de {conta.Nome}");
+            }
+        }
+
+        public void RetornarContasSaldoNegativo()
+        {
+            Console.WriteLine("Todas as contas com saldo negativo:");
+
+            IList<Conta> list = _contaRepository.RetornarContasSaldoNegativo();
+
+            foreach (Conta conta in list)
+            {
+                Console.WriteLine($"Conta de Id: {conta.Id}, em nome de {conta.Nome}");
+            }
+        }
+
+        public void RetornarTotalInvestido()
+        {
+           decimal totalInvestido = _contaRepository.RetornarTotalInvestido();
+
+            Console.WriteLine($"Total investido: {totalInvestido}");
+        }
+
     }
 }
