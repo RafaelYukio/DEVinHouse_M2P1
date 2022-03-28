@@ -68,7 +68,7 @@ namespace M2P1.Fintech.Repositories
         public void AlterarDados(string nome, string id, string endereco, decimal rendaMensal, int contaNumero, AgenciaEnum agencia)
         {
             Conta conta = RetornarDado(id);
-            conta.Dados(nome, endereco, rendaMensal, contaNumero, agencia);
+            conta.AlteraDados(nome, endereco, rendaMensal, contaNumero, agencia);
         }
     }
 }

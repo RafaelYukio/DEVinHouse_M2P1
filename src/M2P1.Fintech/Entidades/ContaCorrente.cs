@@ -6,8 +6,8 @@ namespace M2P1.Fintech.Entidades
     {
         public decimal ValorChequeEspecial { get; private set; }
 
-        public ContaCorrente(string id, string nome, string cpf, string endereco, decimal rendaMensal, AgenciaEnum agencia)
-        : base(id, nome, cpf, endereco, rendaMensal, agencia)
+        public ContaCorrente(string id, string nome, string cpf, string endereco, decimal rendaMensal, int contaNumero, AgenciaEnum agencia)
+        : base(id, nome, cpf, endereco, rendaMensal, contaNumero, agencia)
         {
             TipoConta = TipoContaEnum.Corrente;
             ValorChequeEspecial = Decimal.Multiply(rendaMensal, 0.10M);
@@ -17,7 +17,6 @@ namespace M2P1.Fintech.Entidades
         {
             ValorChequeEspecial -= valor;
         }
-
         public void PagoChequeEspecial(decimal valor)
         {
             ValorChequeEspecial += valor;

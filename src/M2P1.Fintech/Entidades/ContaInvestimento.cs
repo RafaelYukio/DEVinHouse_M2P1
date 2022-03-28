@@ -11,8 +11,8 @@ namespace M2P1.Fintech.Entidades
         public decimal ValorAplicacoLCA { get; private set; }
         public decimal ValorAplicacoCDB { get; private set; }
 
-        public ContaInvestimento(string id, string nome, string cpf, string endereco, decimal rendaMensal, AgenciaEnum agencia)
-        : base(id, nome, cpf, endereco, rendaMensal, agencia)
+        public ContaInvestimento(string id, string nome, string cpf, string endereco, decimal rendaMensal, int contaNumero, AgenciaEnum agencia)
+        : base(id, nome, cpf, endereco, rendaMensal, contaNumero, agencia)
         {
             TipoConta = TipoContaEnum.Investimento;
             ValorRendimentoLCI = 1.08M;
@@ -37,17 +37,17 @@ namespace M2P1.Fintech.Entidades
 
             for (int i = 0; i < anos; i++)
             {
-                rendimentoTotal = Decimal.Multiply(rendimentoTotal, valorRendimento);
+                rendimentoTotal = rendimentoTotal * valorRendimento;
             }
 
-            rendimentoTotal = rendimentoTotal + valorRendimento * dias;
+            rendimentoTotal = rendimentoTotal + ((valorRendimento - 1) * dias);
 
             return rendimentoTotal;
 
         }
-        public decimal SimulacaoRendimentoLCI(decimal valor, DateOnly dataAplicacao, DateOnly dataResgate) => Decimal.Multiply(valor, SimulacaoRendimentoPorDia(dataAplicacao, dataResgate, ValorRendimentoLCI));
-        public decimal SimulacaoRendimentoLCA(decimal valor, DateOnly dataAplicacao, DateOnly dataResgate) => Decimal.Multiply(valor, SimulacaoRendimentoPorDia(dataAplicacao, dataResgate, ValorRendimentoLCA));
-        public decimal SimulacaoRendimentoCDB(decimal valor, DateOnly dataAplicacao, DateOnly dataResgate) => Decimal.Multiply(valor, SimulacaoRendimentoPorDia(dataAplicacao, dataResgate, ValorRendimentoCDB));
+        public decimal SimulacaoRendimentoLCI(decimal valor, DateOnly dataAplicacao, DateOnly dataResgate) => valor * SimulacaoRendimentoPorDia(dataAplicacao, dataResgate, ValorRendimentoLCI);
+        public decimal SimulacaoRendimentoLCA(decimal valor, DateOnly dataAplicacao, DateOnly dataResgate) => valor * SimulacaoRendimentoPorDia(dataAplicacao, dataResgate, ValorRendimentoLCA);
+        public decimal SimulacaoRendimentoCDB(decimal valor, DateOnly dataAplicacao, DateOnly dataResgate) => valor * SimulacaoRendimentoPorDia(dataAplicacao, dataResgate, ValorRendimentoCDB);
 
         public void AplicarLCI(decimal valor)
         {
@@ -78,6 +78,13 @@ namespace M2P1.Fintech.Entidades
         public decimal ValorLCI() => ValorAplicacoLCI;
         public decimal ValorLCA() => ValorAplicacoLCA;
         public decimal ValorCDB() => ValorAplicacoCDB;
+
+        public void Render(DateOnly novaData)
+        {
+            ValorAplicacoLCI = SimulacaoRendimentoLCI(ValorAplicacoLCI, DateOnly.FromDateTime(DateTime.Now), novaData);
+            ValorAplicacoLCA = SimulacaoRendimentoLCA(ValorAplicacoLCA, DateOnly.FromDateTime(DateTime.Now), novaData);
+            ValorAplicacoCDB = SimulacaoRendimentoCDB(ValorAplicacoCDB, DateOnly.FromDateTime(DateTime.Now), novaData);
+        }
 
     }
 }

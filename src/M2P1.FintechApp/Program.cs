@@ -5,8 +5,6 @@ using M2P1.Fintech.Repositories;
 using M2P1.FintechApp;
 using Microsoft.Extensions.DependencyInjection;
 
-Console.WriteLine("Hello, World!");
-
 #region Resolvendo Injeção de Dependencia
 
 var serviceCollection = new ServiceCollection();
@@ -23,65 +21,84 @@ var _fintechApp = new FuncoesFintech(_ContaRepository, _TransferenciaRepository)
 
 #endregion
 
-_fintechApp.CriarContaPoupanca("1", "Rafael", "333", "Aqui", 1000, AgenciaEnum.Florianopolis);
-_fintechApp.CriarContaInvestimento("2", "José", "444", "Ali", 2000, AgenciaEnum.Biguacu);
-_fintechApp.CriarContaCorrente("3", "Ele", "555", "Lugar", 3000, AgenciaEnum.SaoJose);
-_fintechApp.CriarContaCorrente("4", "Ele", "555", "Lugar", 3000, AgenciaEnum.SaoJose);
-_fintechApp.CriarContaCorrente("5", "Ele", "555", "Lugar", 3000, AgenciaEnum.SaoJose);
+Console.WriteLine("{0}{1}{2}", "Bem vindo ao Banco Banco!", Environment.NewLine, "Escolha uma das opções:");
 
-Console.WriteLine("------------------------------------------");
+void MenuPrincipal()
+{
+    int opcao;
 
-_fintechApp.RetornarContas();
+    Console.WriteLine("");
+    Console.WriteLine("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}", "1 - Criar Conta", Environment.NewLine, "2 - Realizar Transação", Environment.NewLine, "3 - Extratos", Environment.NewLine,
+    "4 - Relatórios", Environment.NewLine, "5 - Exibir Contas", Environment.NewLine, "6 - Exibir Total Investido", Environment.NewLine);
 
-Console.WriteLine("------------------------------------------");
+    opcao = Convert.ToInt32(Console.ReadLine());
 
-_fintechApp.AplicarPoupanca("1", 1000);
-_fintechApp.AplicarLCI("2", 1000);
-_fintechApp.AplicarLCA("2", 2000);
-_fintechApp.AplicarCDB("2", 3000);
-_fintechApp.DepositoConta("3", 5000);
+    switch (opcao)
+    {
+        case 1:
+            CriarConta();
+            break;
 
-Console.WriteLine("------------------------------------------");
+        case 5:
+            RetornarContas();
+            break;
+    }
+}
 
-_fintechApp.RetornarContas();
-_fintechApp.RetornarTotalInvestido();
+void CriarConta()
+{
+    int opcao;
 
-Console.WriteLine("------------------------------------------");
+    string nome;
+    string cpf;
+    string endereco;
+    decimal rendaMensal;
 
-_fintechApp.SimularRendimentoPoupanca("1", 1000, DateOnly.FromDateTime(DateTime.Now.AddDays(300)), 1.005M);
+    Console.Clear();
 
-_fintechApp.SimularRendimentoLCI("2", 1000, DateOnly.FromDateTime(DateTime.Now), DateOnly.FromDateTime(DateTime.Now.AddDays(731)));
+    Console.WriteLine("");
+    Console.WriteLine("{0}{1}", "Escolha uma das opções:", Environment.NewLine);
+    Console.WriteLine("{0}{1}{2}{3}{4}{5}{6}{7}", "1 - Criar Conta Corrente", Environment.NewLine, "2 - Criar Conta Poupança", Environment.NewLine, "3 - Criar Conta Investimento", Environment.NewLine, "4 - Voltar", Environment.NewLine);
 
-_fintechApp.SimularRendimentoLCA("2", 1000, DateOnly.FromDateTime(DateTime.Now), DateOnly.FromDateTime(DateTime.Now.AddDays(731)));
+    opcao = Int32.Parse(Console.ReadLine());
 
-_fintechApp.SimularRendimentoCDB("2", 1000, DateOnly.FromDateTime(DateTime.Now), DateOnly.FromDateTime(DateTime.Now.AddDays(731)));
+    if(opcao == 4)
+    {
+        MenuPrincipal();
+    }
 
-_fintechApp.RetornarTransacoesConta("2");
+    Console.WriteLine("");
+    Console.WriteLine("Digite seu nome:");
+    nome = Console.ReadLine();
+    Console.WriteLine("Digite seu CPF:");
+    cpf = Console.ReadLine();
+    Console.WriteLine("Digite seu endereço:");
+    endereco = Console.ReadLine();
+    Console.WriteLine("Digite sua renda mensal:");
+    rendaMensal = Decimal.Parse(Console.ReadLine());
 
-_fintechApp.ResgatarLCA("2", 1000);
+    switch (opcao)
+    {
+        case 1:
+            _fintechApp.CriarContaCorrente(nome, cpf, endereco, rendaMensal);
+            break;
 
-Console.WriteLine("------------------------------------------");
+        case 2:
+            _fintechApp.CriarContaPoupanca(nome, cpf, endereco, rendaMensal);
+            break;
 
-_fintechApp.RetornarContas();
+        case 3:
+            _fintechApp.CriarContaInvestimento(nome, cpf, endereco, rendaMensal);
+            break;
+    }
 
-_fintechApp.RetornarTransacoesConta("2");
+    MenuPrincipal();
+}
 
-_fintechApp.RetornarContasPorTipo(typeof(ContaInvestimento));
+void RetornarContas()
+{
+    _fintechApp.RetornarContas();
+    MenuPrincipal();
+}
 
-_fintechApp.RetornarContasSaldoNegativo();
-
-Console.WriteLine("------------------------------------------");
-
-_fintechApp.SaqueConta("3", 3000);
-
-_fintechApp.RetornarContas();
-
-_fintechApp.SaqueConta("3", 3000);
-
-_fintechApp.RetornarContas();
-
-_fintechApp.SaqueConta("3", 2200);
-
-_fintechApp.RetornarContasSaldoNegativo();
-
-_fintechApp.RetornarContas();
+MenuPrincipal();

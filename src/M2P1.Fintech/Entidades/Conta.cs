@@ -14,12 +14,13 @@ namespace M2P1.Fintech.Entidades
         public decimal ValorSaldo { get; protected set; }
         public IList<Transacao> Historico { get; private set; }
 
-        protected Conta(string id, string nome, string cpf, string endereco, decimal rendaMensal, AgenciaEnum agencia) : base(id)
+        protected Conta(string id, string nome, string cpf, string endereco, decimal rendaMensal, int contaNumero, AgenciaEnum agencia) : base(id)
         {
             Nome = nome;
             CPF = cpf;
             Endereco = endereco;
             RendaMensal = rendaMensal;
+            ContaNumero = contaNumero;
             Agencia = agencia;
             ValorSaldo = 0;
             Historico = new List<Transacao>();
@@ -39,7 +40,7 @@ namespace M2P1.Fintech.Entidades
 
         public IList<Transacao> Extrato() => Historico;
 
-        public void Dados(string nome, string endereco, decimal rendaMensal, int contaNumero, AgenciaEnum agencia)
+        public void AlteraDados(string nome, string endereco, decimal rendaMensal, int contaNumero, AgenciaEnum agencia)
         {
             Nome = nome;
             Endereco = endereco;

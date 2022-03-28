@@ -6,8 +6,8 @@ namespace M2P1.Fintech.Entidades
     {
         public decimal ValorRendimentoPoupanca { get; private set; }
         public decimal ValorAplicacoPoupanca { get; private set; }
-        public ContaPoupanca(string id, string nome, string cpf, string endereco, decimal rendaMensal, AgenciaEnum agencia)
-            : base(id, nome, cpf, endereco, rendaMensal, agencia)
+        public ContaPoupanca(string id, string nome, string cpf, string endereco, decimal rendaMensal, int contaNumero, AgenciaEnum agencia)
+            : base(id, nome, cpf, endereco, rendaMensal, contaNumero, agencia)
         {
             TipoConta = TipoContaEnum.Poupanca;
             ValorRendimentoPoupanca = 1.005M;
@@ -25,25 +25,26 @@ namespace M2P1.Fintech.Entidades
 
             for (int i = 0; i < meses; i++)
             {
-                rendimentoTotal = Decimal.Multiply(rendimentoTotal, valorRendimento);
+                rendimentoTotal = rendimentoTotal * valorRendimento;
             }
 
             return rendimentoTotal;
 
         }
-        public decimal SimulacaoRendimento(decimal valor, DateOnly dataResgate, decimal rendimento) => Decimal.Multiply(valor, SimulacaoRendimentoPorMes(dataResgate, rendimento));
-
+        public decimal SimulacaoRendimento(decimal valor, DateOnly dataResgate, decimal rendimento) => valor * SimulacaoRendimentoPorMes(dataResgate, rendimento);
         public void AplicarPoupanca(decimal valor)
         {
             ValorAplicacoPoupanca += valor;
         }
-
         public void ResgatarPoupanca(decimal valor)
         {
             ValorAplicacoPoupanca -= valor;
         }
-
         public decimal ValorPoupanca() => ValorAplicacoPoupanca;
+        public void Render(DateOnly novaData)
+        {
+            ValorAplicacoPoupanca = SimulacaoRendimento(ValorAplicacoPoupanca, novaData, ValorRendimentoPoupanca);
+        }
 
 
     }
