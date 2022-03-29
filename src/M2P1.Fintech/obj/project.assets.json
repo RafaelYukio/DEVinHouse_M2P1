@@ -8,19 +8,19 @@
     "net6.0": []
   },
   "packageFolders": {
-    "C:\\Users\\Pichau\\.nuget\\packages\\": {}
+    "C:\\Users\\rafae\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Pichau\\Documents\\M2P1\\DEVinHouse_M2P1\\src\\M2P1.Fintech\\M2P1.Fintech.csproj",
+      "projectUniqueName": "C:\\Users\\rafae\\Documents\\DEV\\DEVinHouse\\M2P1\\DEVinHouse_M2P1\\src\\M2P1.Fintech\\M2P1.Fintech.csproj",
       "projectName": "M2P1.Fintech",
-      "projectPath": "C:\\Users\\Pichau\\Documents\\M2P1\\DEVinHouse_M2P1\\src\\M2P1.Fintech\\M2P1.Fintech.csproj",
-      "packagesPath": "C:\\Users\\Pichau\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Pichau\\Documents\\M2P1\\DEVinHouse_M2P1\\src\\M2P1.Fintech\\obj\\",
+      "projectPath": "C:\\Users\\rafae\\Documents\\DEV\\DEVinHouse\\M2P1\\DEVinHouse_M2P1\\src\\M2P1.Fintech\\M2P1.Fintech.csproj",
+      "packagesPath": "C:\\Users\\rafae\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\rafae\\Documents\\DEV\\DEVinHouse\\M2P1\\DEVinHouse_M2P1\\src\\M2P1.Fintech\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Pichau\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\rafae\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

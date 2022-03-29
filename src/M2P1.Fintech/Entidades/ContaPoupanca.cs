@@ -40,7 +40,7 @@ namespace M2P1.Fintech.Entidades
         {
             ValorAplicacoPoupanca -= valor;
         }
-        public decimal ValorPoupanca() => ValorAplicacoPoupanca;
+        public decimal RetornarValorPoupanca() => ValorAplicacoPoupanca;
         public void Render(DateOnly novaData)
         {
             ValorAplicacoPoupanca = SimulacaoRendimento(ValorAplicacoPoupanca, novaData, ValorRendimentoPoupanca);

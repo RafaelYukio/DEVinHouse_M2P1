@@ -23,7 +23,7 @@ namespace M2P1.Fintech.Repositories
         public void ApagarDado(string id) => Dados.Remove(RetornarDado(id));
         public T RetornarDado(string id) =>
                 Dados.FirstOrDefault(dado => dado.Id == id)
-             ?? throw new Exception($"Dado não encontrado");
+             ?? throw new Exception($"Conta não encontrada!");
         public IList<T> RetornarDados() => Dados;
     }
 }

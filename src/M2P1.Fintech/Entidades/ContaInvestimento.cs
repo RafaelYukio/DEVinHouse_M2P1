@@ -75,9 +75,9 @@ namespace M2P1.Fintech.Entidades
             ValorAplicacoCDB -= valor;
         }
 
-        public decimal ValorLCI() => ValorAplicacoLCI;
-        public decimal ValorLCA() => ValorAplicacoLCA;
-        public decimal ValorCDB() => ValorAplicacoCDB;
+        public decimal RetornarValorLCI() => ValorAplicacoLCI;
+        public decimal RetornarValorLCA() => ValorAplicacoLCA;
+        public decimal RetornarValorCDB() => ValorAplicacoCDB;
 
         public void Render(DateOnly novaData)
         {

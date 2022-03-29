@@ -22,3 +22,15 @@ C:\Users\Pichau\Documents\M2P1\DEVinHouse_M2P1\src\M2P1.Fintech\obj\Debug\net6.0
 C:\Users\Pichau\Documents\M2P1\DEVinHouse_M2P1\src\M2P1.Fintech\obj\Debug\net6.0\refint\M2P1.Fintech.dll
 C:\Users\Pichau\Documents\M2P1\DEVinHouse_M2P1\src\M2P1.Fintech\obj\Debug\net6.0\M2P1.Fintech.pdb
 C:\Users\Pichau\Documents\M2P1\DEVinHouse_M2P1\src\M2P1.Fintech\obj\Debug\net6.0\ref\M2P1.Fintech.dll
+C:\Users\rafae\Documents\DEV\DEVinHouse\M2P1\DEVinHouse_M2P1\src\M2P1.Fintech\bin\Debug\net6.0\M2P1.Fintech.deps.json
+C:\Users\rafae\Documents\DEV\DEVinHouse\M2P1\DEVinHouse_M2P1\src\M2P1.Fintech\bin\Debug\net6.0\M2P1.Fintech.dll
+C:\Users\rafae\Documents\DEV\DEVinHouse\M2P1\DEVinHouse_M2P1\src\M2P1.Fintech\bin\Debug\net6.0\M2P1.Fintech.pdb
+C:\Users\rafae\Documents\DEV\DEVinHouse\M2P1\DEVinHouse_M2P1\src\M2P1.Fintech\obj\Debug\net6.0\M2P1.Fintech.csproj.AssemblyReference.cache
+C:\Users\rafae\Documents\DEV\DEVinHouse\M2P1\DEVinHouse_M2P1\src\M2P1.Fintech\obj\Debug\net6.0\M2P1.Fintech.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\rafae\Documents\DEV\DEVinHouse\M2P1\DEVinHouse_M2P1\src\M2P1.Fintech\obj\Debug\net6.0\M2P1.Fintech.AssemblyInfoInputs.cache
+C:\Users\rafae\Documents\DEV\DEVinHouse\M2P1\DEVinHouse_M2P1\src\M2P1.Fintech\obj\Debug\net6.0\M2P1.Fintech.AssemblyInfo.cs
+C:\Users\rafae\Documents\DEV\DEVinHouse\M2P1\DEVinHouse_M2P1\src\M2P1.Fintech\obj\Debug\net6.0\M2P1.Fintech.csproj.CoreCompileInputs.cache
+C:\Users\rafae\Documents\DEV\DEVinHouse\M2P1\DEVinHouse_M2P1\src\M2P1.Fintech\obj\Debug\net6.0\M2P1.Fintech.dll
+C:\Users\rafae\Documents\DEV\DEVinHouse\M2P1\DEVinHouse_M2P1\src\M2P1.Fintech\obj\Debug\net6.0\refint\M2P1.Fintech.dll
+C:\Users\rafae\Documents\DEV\DEVinHouse\M2P1\DEVinHouse_M2P1\src\M2P1.Fintech\obj\Debug\net6.0\M2P1.Fintech.pdb
+C:\Users\rafae\Documents\DEV\DEVinHouse\M2P1\DEVinHouse_M2P1\src\M2P1.Fintech\obj\Debug\net6.0\ref\M2P1.Fintech.dll
