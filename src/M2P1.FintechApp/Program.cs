@@ -23,6 +23,9 @@ var _fintechApp = new FuncoesFintech(_ContaRepository, _TransferenciaRepository)
 
 Console.WriteLine("Bem vindo ao Banco Banco!");
 
+bool VerificaConta(string contaNumero) => _fintechApp.VerificaContaNumero(contaNumero);
+
+
 void MenuPrincipal()
 {
     string stringOpcao;
@@ -113,8 +116,6 @@ void CriarConta()
     MenuPrincipal();
 }
 
-bool VerificaConta(string contaNumero) => _fintechApp.VerificaContaNumero(contaNumero);
-
 void AcessarConta()
 {
     string contaNumero;
@@ -128,10 +129,11 @@ void AcessarConta()
         string opcao;
 
         Console.WriteLine("{0}{1}", "Escolha uma das opções:", Environment.NewLine);
+
         if (_fintechApp.RetornarTipoConta(contaNumero) == typeof(ContaCorrente))
         {
             Console.WriteLine("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}{12}{13}", "1 - Saque", Environment.NewLine, "2 - Depósito", Environment.NewLine, "3 - Transferência",
-            Environment.NewLine, "4 - Saldo", Environment.NewLine, "5 - Extrato", Environment.NewLine, "4 - Informações da conta", Environment.NewLine, "5 - Alterar dados", Environment.NewLine, "6 - Voltar menu principal", Environment.NewLine);
+            Environment.NewLine, "4 - Saldo", Environment.NewLine, "5 - Extrato", Environment.NewLine, "6 - Informações da conta", Environment.NewLine, "7 - Alterar dados", Environment.NewLine, "8 - Voltar ao menu principal", Environment.NewLine);
 
             opcao = Console.ReadLine();
 
@@ -153,11 +155,74 @@ void AcessarConta()
                     Console.Clear();
                     SaldoConta(contaNumero.ToString());
                     break;
+                case "5":
+                    Console.Clear();
+                    RetornarExtrato(contaNumero.ToString());
+                    break;
+                case "6":
+                    Console.Clear();
+                    RetornarConta(contaNumero.ToString());
+                    break;
+                case "7":
+                    Console.Clear();
+                    AlterarDados(contaNumero.ToString());
+                    break;
+                case "8":
+                    Console.Clear();
+                    MenuPrincipal();
+                    break;
             }
         }
         if (_fintechApp.RetornarTipoConta(contaNumero) == typeof(ContaPoupanca))
         {
+            Console.WriteLine("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}{12}{13}{14}{15}", "1 - Saque", Environment.NewLine, "2 - Depósito", Environment.NewLine, "3 - Aplicar poupança", Environment.NewLine, "4 - Simular poupança", Environment.NewLine, "5 - Transferência",
+            Environment.NewLine, "6 - Saldo", Environment.NewLine, "7 - Extrato", Environment.NewLine, "8 - Informações da conta", Environment.NewLine, "9 - Alterar dados", Environment.NewLine, "10 - Voltar ao menu principal", Environment.NewLine);
 
+            opcao = Console.ReadLine();
+
+            switch (opcao)
+            {
+                case "1":
+                    Console.Clear();
+                    Saque(contaNumero.ToString());
+                    break;
+                case "2":
+                    Console.Clear();
+                    Deposito(contaNumero.ToString());
+                    break;
+                case "3":
+                    Console.Clear();
+                    AplicarPoupanca(contaNumero.ToString());
+                    break;
+                case "4":
+                    Console.Clear();
+                    SimularPoupanca(contaNumero.ToString());
+                    break;
+                case "5":
+                    Console.Clear();
+                    Transferencia(contaNumero.ToString());
+                    break;
+                case "6":
+                    Console.Clear();
+                    SaldoConta(contaNumero.ToString());
+                    break;
+                case "7":
+                    Console.Clear();
+                    RetornarExtrato(contaNumero.ToString());
+                    break;
+                case "8":
+                    Console.Clear();
+                    RetornarConta(contaNumero.ToString());
+                    break;
+                case "9":
+                    Console.Clear();
+                    AlterarDados(contaNumero.ToString());
+                    break;
+                case "10":
+                    Console.Clear();
+                    MenuPrincipal();
+                    break;
+            }
         }
 
     }
@@ -167,8 +232,8 @@ void AcessarConta()
         MenuPrincipal();
     }
 
-
 }
+
 
 void Saque(string id)
 {
@@ -205,6 +270,49 @@ void Deposito(string id)
     }
 }
 
+void AplicarPoupanca(string id)
+{
+    decimal valor;
+
+    Console.WriteLine("Digite o valor do depósito:");
+    if (Decimal.TryParse(Console.ReadLine(), out valor))
+    {
+        _fintechApp.AplicarPoupanca(id, valor);
+        MenuPrincipal();
+    }
+    else
+    {
+        Console.WriteLine("Valor inválido!");
+        MenuPrincipal();
+    }
+}
+
+void SimularPoupanca(string id)
+{
+    decimal valor;
+    DateTime dataResgate;
+    double rendimento;
+
+    Console.WriteLine("Digite o valor do depósito:");
+    if (Decimal.TryParse(Console.ReadLine(), out valor))
+    {
+        Console.WriteLine("Digite a data de resgate (dd/mm/aa):");
+        dataResgate = DateTime.Parse(Console.ReadLine());
+
+        Console.WriteLine("Digite o rendimento anual da poupança (%):");
+        if (double.TryParse(Console.ReadLine(), out rendimento))
+        {
+            _fintechApp.SimularRendimentoPoupanca(id, valor, dataResgate, Math.Pow(1 + rendimento/100, -12));
+
+        }
+    }
+    else
+    {
+        Console.WriteLine("Valor inválido!");
+    }
+    MenuPrincipal();
+}
+
 void Transferencia(string id)
 {
     decimal valor;
@@ -234,9 +342,17 @@ void Transferencia(string id)
     }
 }
 
+
 void SaldoConta(string id)
 {
     _fintechApp.RetornarSaldoConta(id);
+    MenuPrincipal();
+}
+
+
+void RetornarConta(string id)
+{
+    _fintechApp.RetornarConta(id);
     MenuPrincipal();
 }
 
@@ -245,5 +361,64 @@ void RetornarContas()
     _fintechApp.RetornarContas();
     MenuPrincipal();
 }
+
+void RetornarExtrato(string id)
+{
+    _fintechApp.RetornarTransacoesConta(id);
+    MenuPrincipal();
+}
+
+
+void AlterarDados(string id)
+{
+    if (VerificaConta(id))
+    {
+        string nome;
+        string endereco;
+        decimal rendaMensal;
+        AgenciaEnum agencia = AgenciaEnum.Florianopolis;
+
+        Console.WriteLine("Digite novo nome:");
+        nome = Console.ReadLine();
+        Console.WriteLine("Digite novo endereço:");
+        endereco = Console.ReadLine();
+        Console.WriteLine("Digite nova renda mensal:");
+        if (Decimal.TryParse(Console.ReadLine(), out rendaMensal))
+        {
+            Console.WriteLine("Escolha nova agência:");
+            Console.WriteLine("");
+            Console.WriteLine("1 - Florianópolis");
+            Console.WriteLine("2 - São José");
+            Console.WriteLine("3 - Biguaçu");
+
+            switch (Console.ReadLine())
+            {
+                case "1":
+                    agencia = AgenciaEnum.Florianopolis;
+                    break;
+                case "2":
+                    agencia = AgenciaEnum.SaoJose;
+                    break;
+                case "3":
+                    agencia = AgenciaEnum.Biguacu;
+                    break;
+            }
+
+            _fintechApp.AlterarDadosConta(id, nome, endereco, rendaMensal, agencia);
+            MenuPrincipal();
+        }
+        else
+        {
+            Console.WriteLine("Valor inválido!");
+            MenuPrincipal();
+        }
+    }
+    else
+    {
+        Console.WriteLine("Conta número inexistente!");
+        MenuPrincipal();
+    }
+}
+
 
 MenuPrincipal();

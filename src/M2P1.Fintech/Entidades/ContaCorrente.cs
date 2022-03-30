@@ -25,5 +25,6 @@ namespace M2P1.Fintech.Entidades
         }
         public decimal RetornarLimiteChequeEspecial() => LimiteChequeEspecial;
         public decimal RetornarValorChequeEspecial() => ValorChequeEspecial;
+        public void AlterarLimiteChequeEspecial(decimal rendaMensalNova) => LimiteChequeEspecial = rendaMensalNova * 0.10M;
     }
 }

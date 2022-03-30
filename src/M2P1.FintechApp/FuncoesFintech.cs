@@ -15,12 +15,12 @@ namespace M2P1.FintechApp
             _transferenciaRepository = TransferenciaRepository;
         }
 
-        public void RetornaData()
+        public void RetornarData()
         {
             Console.WriteLine(_contaRepository.RetornarDataRepository());
             Console.WriteLine(_transferenciaRepository.RetornarDataRepository());
         }
-        public void MudaData(DateTime novaData)
+        public void MudarData(DateTime novaData)
         {
             _contaRepository.MudarData(novaData);
             _transferenciaRepository.MudarData(novaData);
@@ -178,18 +178,14 @@ namespace M2P1.FintechApp
                     if (valor > conta.Saldo())
                     {
                         conta.UsoChequeEspecial(valor - Math.Max(0, conta.Saldo()));
-                        conta.Saque(valor);
-
-                        Console.WriteLine($"Saque na conta {id} de {conta.Nome} realizada, cheque especial utilizado!");
+                        Console.WriteLine($"Saque na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso, cheque especial utilizado!");
                     }
                     else
                     {
-                        conta.Saque(valor);
-
-                        Console.WriteLine($"Saque na conta {id} de {conta.Nome} realizada");
+                        Console.WriteLine($"Saque na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
                     }
+                    conta.Saque(valor);
                     _contaRepository.AdicionarTransacao(id, new Transacao(TipoTransacaoEnum.Saque, "Saque", valor));
-
                 }
                 else
                 {
@@ -201,10 +197,9 @@ namespace M2P1.FintechApp
                 if (valor <= conta.Saldo())
                 {
                     conta.Saque(valor);
-
                     _contaRepository.AdicionarTransacao(id, new Transacao(TipoTransacaoEnum.Saque, "Saque", valor));
 
-                    Console.WriteLine($"Saque na conta {id} de {conta.Nome} realizada");
+                    Console.WriteLine($"Saque na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
                 }
                 else
                 {
@@ -230,16 +225,16 @@ namespace M2P1.FintechApp
                 {
                     conta.PagoChequeEspecial(valor);
 
-                    Console.WriteLine($"Depósito na conta {id} de {conta.Nome} utilizada para pagar cheque especial.");
+                    Console.WriteLine($"Depósito na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, utilizada para pagar cheque especial.");
                 }
                 else
                 {
                     conta.PagoChequeEspecial(faltaPagarChequeEspecial);
 
-                    Console.WriteLine($"Depósito na conta {id} de {conta.Nome} realizada.");
+                    Console.WriteLine($"Depósito na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
                 }
-
                 conta.Deposito(valor);
+                _contaRepository.AdicionarTransacao(id, new Transacao(TipoTransacaoEnum.Deposito, "Depósito", valor));
 
             }
             else
@@ -247,7 +242,7 @@ namespace M2P1.FintechApp
                 conta.Deposito(valor);
                 _contaRepository.AdicionarTransacao(id, new Transacao(TipoTransacaoEnum.Deposito, "Depósito", valor));
 
-                Console.WriteLine($"Depósito na conta {id} de {conta.Nome} realizada");
+                Console.WriteLine($"Depósito na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
             }
 
         }
@@ -286,18 +281,18 @@ namespace M2P1.FintechApp
                             contaOrigem.UsoChequeEspecial(valor - Math.Max(0, contaOrigem.Saldo()));
                             contaOrigem.Saque(valor);
 
-                            Console.WriteLine($"Transferência da conta número/ID {idOrigem} de {contaOrigem.Nome} para conta {idDestino} de {contaDestino.Nome} realizada com sucesso! Cheque especial utilizado!");
+                            Console.WriteLine($"Transferência da conta número/ID {idOrigem} de {contaOrigem.Nome} para conta número/ID {idDestino} de {contaDestino.Nome}, no valor de R$ {valor}, realizada com sucesso! Cheque especial utilizado!");
                         }
                         else
                         {
                             contaOrigem.Saque(valor);
 
-                            Console.WriteLine($"Transferência da conta número/ID {idOrigem} de {contaOrigem.Nome} para conta {idDestino} de {contaDestino.Nome} realizada com sucesso!");
+                            Console.WriteLine($"Transferência da conta número/ID {idOrigem} de {contaOrigem.Nome} para conta número/ID {idDestino} de {contaDestino.Nome}, no valor de R$ {valor}, realizada com sucesso!");
                         }
 
                         contaDestino.Deposito(valor);
 
-                        Transferencia transferecia = new Transferencia(TipoTransacaoEnum.Transferencia, "Transferencia", valor, contaOrigem, contaDestino);
+                        Transferencia transferecia = new Transferencia(TipoTransacaoEnum.Transferencia, "Transferência", valor, contaOrigem, contaDestino);
 
                         _contaRepository.AdicionarTransacao(idOrigem, transferecia);
                         _contaRepository.AdicionarTransacao(idDestino, transferecia);
@@ -309,13 +304,14 @@ namespace M2P1.FintechApp
                         Console.WriteLine($"Transferência não realizada. Saldo (saldo + valor do cheque especial) insuficiente da conta número/ID {idOrigem} de {contaOrigem.Nome}");
                     }
 
-                } else
+                }
+                else
                 {
                     if (valor <= contaOrigem.Saldo())
                     {
                         contaOrigem.Saque(valor);
 
-                        Transferencia transferecia = new Transferencia(TipoTransacaoEnum.Transferencia, "Transferencia", valor, contaOrigem, contaDestino);
+                        Transferencia transferecia = new Transferencia(TipoTransacaoEnum.Transferencia, "Transferência", valor, contaOrigem, contaDestino);
 
                         _contaRepository.AdicionarTransacao(idOrigem, transferecia);
                         _contaRepository.AdicionarTransacao(idDestino, transferecia);
@@ -361,6 +357,8 @@ namespace M2P1.FintechApp
             investimento.Aplicar();
 
             _contaRepository.AdicionarTransacao(id, investimento);
+
+            Console.WriteLine($"Aplicação na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
         }
         public void ResgatarPoupanca(string id, decimal valor)
         {
@@ -385,7 +383,7 @@ namespace M2P1.FintechApp
 
             decimal valorSimulacaoRendimentoLCI = conta.SimulacaoRendimentoLCI(valor, dataAplicacao, dataResgate);
 
-            Console.WriteLine($"Rendimento simulado na conta numero {id}, valor de {valorSimulacaoRendimentoLCI}");
+            Console.WriteLine($"Valor de R$ {valor} será R$ {valorSimulacaoRendimentoLCI}, se aplicado em LCI durante {dataAplicacao} a {dataResgate}");
         }
         public void SimularRendimentoLCA(string id, decimal valor, DateOnly dataAplicacao, DateOnly dataResgate)
         {
@@ -393,7 +391,7 @@ namespace M2P1.FintechApp
 
             decimal valorSimulacaoRendimentoLCA = conta.SimulacaoRendimentoLCA(valor, dataAplicacao, dataResgate);
 
-            Console.WriteLine($"Rendimento simulado na conta numero {id}, valor de {valorSimulacaoRendimentoLCA}");
+            Console.WriteLine($"Valor de R$ {valor} será R$ {valorSimulacaoRendimentoLCA}, se aplicado em LCI durante {dataAplicacao} a {dataResgate}");
         }
         public void SimularRendimentoCDB(string id, decimal valor, DateOnly dataAplicacao, DateOnly dataResgate)
         {
@@ -401,7 +399,7 @@ namespace M2P1.FintechApp
 
             decimal valorSimulacaoRendimentoCDB = conta.SimulacaoRendimentoCDB(valor, dataAplicacao, dataResgate);
 
-            Console.WriteLine($"Rendimento simulado na conta numero {id}, valor de {valorSimulacaoRendimentoCDB}");
+            Console.WriteLine($"Valor de R$ {valor} será R$ {valorSimulacaoRendimentoCDB}, se aplicado em LCI durante {dataAplicacao} a {dataResgate}");
         }
         public void AplicarLCI(string id, decimal valor)
         {
@@ -419,6 +417,8 @@ namespace M2P1.FintechApp
             investimento.Aplicar();
 
             _contaRepository.AdicionarTransacao(id, investimento);
+
+            Console.WriteLine($"Aplicação na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
         }
         public void AplicarLCA(string id, decimal valor)
         {
@@ -436,6 +436,8 @@ namespace M2P1.FintechApp
             investimento.Aplicar();
 
             _contaRepository.AdicionarTransacao(id, investimento);
+
+            Console.WriteLine($"Aplicação na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
         }
         public void AplicarCDB(string id, decimal valor)
         {
@@ -453,6 +455,8 @@ namespace M2P1.FintechApp
             investimento.Aplicar();
 
             _contaRepository.AdicionarTransacao(id, investimento);
+
+            Console.WriteLine($"Aplicação na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
         }
         public void ResgatarLCI(string id, decimal valor)
         {
@@ -469,6 +473,8 @@ namespace M2P1.FintechApp
             investimento.Resgatar();
 
             _contaRepository.AdicionarTransacao(id, investimento);
+
+            Console.WriteLine($"Resgate na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
         }
         public void ResgatarLCA(string id, decimal valor)
         {
@@ -485,6 +491,8 @@ namespace M2P1.FintechApp
             investimento.Resgatar();
 
             _contaRepository.AdicionarTransacao(id, investimento);
+
+            Console.WriteLine($"Resgate na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
         }
         public void ResgatarCDB(string id, decimal valor)
         {
@@ -501,9 +509,36 @@ namespace M2P1.FintechApp
             investimento.Resgatar();
 
             _contaRepository.AdicionarTransacao(id, investimento);
+
+            Console.WriteLine($"Resgate na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
         }
 
         public Type RetornarTipoConta(string id) => _contaRepository.RetornarDado(id).GetType();
+        public void RetornarConta(string id)
+        {
+            dynamic conta = _contaRepository.RetornarDado(id);
+
+            decimal valorPoupanca;
+            decimal valorLCI;
+            decimal valorLCA;
+            decimal valorCDB;
+
+            Console.WriteLine(String.Format("|{0,-15}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-15}|{8,-15}|{9,-15}|{10,-15}|{11,-15}|", "ID", "Tipo de conta", "Agencia", "Nome", "Endereço", "Saldo", "Renda Mensal", "Cheque Especial", "Poupança", "LCI", "LCA", "CDB"));
+            Console.WriteLine(String.Format("|{0,-15}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-15}|{8,-15}|{9,-15}|{10,-15}|{11,-15}|", "", "", "", "", "", "", "", "", "", "", "", "", ""));
+
+            if (conta.GetType() == typeof(ContaCorrente))
+            {
+                Console.WriteLine(String.Format("|{0,-15}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-15}|{8,-15}|{9,-15}|{10,-15}|{11,-15}|", conta.Id, conta.TipoConta, conta.Agencia, conta.Nome, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), conta.RetornarValorChequeEspecial().ToString("0.00"), "-", "-", "-", "-"));
+            }
+            if (conta.GetType() == typeof(ContaPoupanca))
+            {
+                Console.WriteLine(String.Format("|{0,-15}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-15}|{8,-15}|{9,-15}|{10,-15}|{11,-15}|", conta.Id, conta.TipoConta, conta.Agencia, conta.Nome, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), "-", conta.RetornarValorPoupanca().ToString("0.00"), "-", "-", "-"));
+            }
+            if (conta.GetType() == typeof(ContaInvestimento))
+            {
+                Console.WriteLine(String.Format("|{0,-15}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-15}|{8,-15}|{11,-15}|", conta.Id, conta.TipoConta, conta.Agencia, conta.Nome, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), "-", "-", conta.RetornarValorLCI().ToString("0.00"), conta.RetornarValorLCA().ToString("0.00"), conta.RetornarValorCDB().ToString("0.00")));
+            }
+        }
         public void RetornarContas()
         {
             IList<Conta> list = _contaRepository.RetornarDados();
@@ -513,26 +548,24 @@ namespace M2P1.FintechApp
             decimal valorLCA;
             decimal valorCDB;
 
-            Console.WriteLine(String.Format("|{0,-15}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-15}|{8,-15}|{9,-15}|{10,-15}|", "ID", "Tipo de conta", "Agencia", "Nome", "Endereço", "Saldo", "Cheque Especial", "Poupança", "LCI", "LCA", "CDB"));
-            Console.WriteLine(String.Format("|{0,-15}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-15}|{8,-15}|{9,-15}|{10,-15}|", "", "", "", "", "", "", "", "", "", "", ""));
+            Console.WriteLine(String.Format("|{0,-15}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-15}|{8,-15}|{9,-15}|{10,-15}|{11,-15}|", "ID", "Tipo de conta", "Agencia", "Nome", "Endereço", "Saldo", "Renda Mensal", "Cheque Especial", "Poupança", "LCI", "LCA", "CDB"));
+            Console.WriteLine(String.Format("|{0,-15}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-15}|{8,-15}|{9,-15}|{10,-15}|{11,-15}|", "", "", "", "", "", "", "", "", "", "", "", "", ""));
 
             foreach (dynamic conta in list)
             {
                 if (conta.GetType() == typeof(ContaCorrente))
                 {
-                    Console.WriteLine(String.Format("|{0,-15}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-15}|{8,-15}|{9,-15}|{10,-15}|", conta.Id, conta.TipoConta, conta.Agencia, conta.Nome, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RetornarValorChequeEspecial().ToString("0.00"), "-", "-", "-", "-"));
+                    Console.WriteLine(String.Format("|{0,-15}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-15}|{8,-15}|{9,-15}|{10,-15}|{11,-15}|", conta.Id, conta.TipoConta, conta.Agencia, conta.Nome, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), conta.RetornarValorChequeEspecial().ToString("0.00"), "-", "-", "-", "-"));
                 }
                 if (conta.GetType() == typeof(ContaPoupanca))
                 {
-                    Console.WriteLine(String.Format("|{0,-15}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-15}|{8,-15}|{9,-15}|{10,-15}|", conta.Id, conta.TipoConta, conta.Agencia, conta.Nome, conta.Endereco, conta.Saldo().ToString("0.00"), "-", conta.RetornarValorPoupanca().ToString("0.00"), "-", "-", "-"));
+                    Console.WriteLine(String.Format("|{0,-15}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-15}|{8,-15}|{9,-15}|{10,-15}|{11,-15}|", conta.Id, conta.TipoConta, conta.Agencia, conta.Nome, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), "-", conta.RetornarValorPoupanca().ToString("0.00"), "-", "-", "-"));
                 }
                 if (conta.GetType() == typeof(ContaInvestimento))
                 {
-                    Console.WriteLine(String.Format("|{0,-15}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-15}|{8,-15}|{9,-15}|{10,-15}|", conta.Id, conta.TipoConta, conta.Agencia, conta.Nome, conta.Endereco, conta.Saldo().ToString("0.00"), "-", "-", conta.RetornarValorLCI().ToString("0.00"), conta.RetornarValorLCA().ToString("0.00"), conta.RetornarValorCDB().ToString("0.00")));
+                    Console.WriteLine(String.Format("|{0,-15}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-15}|{8,-15}|{11,-15}|{12,-15}|", conta.Id, conta.TipoConta, conta.Agencia, conta.Nome, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), "-", "-", conta.RetornarValorLCI().ToString("0.00"), conta.RetornarValorLCA().ToString("0.00"), conta.RetornarValorCDB().ToString("0.00")));
                 }
             }
-
-
         }
         public void RetornarSaldoConta(string id)
         {
@@ -550,7 +583,7 @@ namespace M2P1.FintechApp
                 }
                 if (transacao.GetType() == typeof(Transferencia))
                 {
-                    Console.WriteLine($"Tipo: {transacao.TipoTransacao}, Descrição: {transacao.Descricao}, Valor: {transacao.Valor}, Destinho: {transacao.DadosContaDestino.Nome}, Data: {transacao.Data}");
+                    Console.WriteLine($"Tipo: {transacao.TipoTransacao}, Descrição: {transacao.Descricao}, Valor: {transacao.Valor}, Destino: {transacao.DadosContaDestino.Nome}, Data: {transacao.Data}");
                 }
                 if (transacao.GetType() == typeof(Investimento))
                 {
@@ -597,6 +630,23 @@ namespace M2P1.FintechApp
             decimal totalInvestido = _contaRepository.RetornarTotalInvestido();
 
             Console.WriteLine($"Total investido: {totalInvestido}");
+        }
+        public void AlterarDadosConta(string id, string nome, string endereco, decimal rendaMensal, AgenciaEnum agencia)
+        {
+            dynamic conta = _contaRepository.RetornarDado(id);
+
+            Console.WriteLine("Dados antigos:");
+            RetornarConta(id);
+
+            _contaRepository.AlterarDados(id, nome, endereco, rendaMensal, agencia);
+
+            if (RetornarTipoConta(id) == typeof(ContaCorrente))
+            {
+                conta.AlterarLimiteChequeEspecial(rendaMensal);
+            }
+
+            Console.WriteLine("Dados novos:");
+            RetornarConta(id);
         }
 
     }

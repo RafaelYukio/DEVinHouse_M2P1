@@ -40,12 +40,11 @@ namespace M2P1.Fintech.Entidades
 
         public IList<Transacao> Extrato() => Historico;
 
-        public void AlteraDados(string nome, string endereco, decimal rendaMensal, int contaNumero, AgenciaEnum agencia)
+        public void AlteraDados(string nome, string endereco, decimal rendaMensal, AgenciaEnum agencia)
         {
             Nome = nome;
             Endereco = endereco;
             RendaMensal = rendaMensal;
-            ContaNumero = contaNumero;
             Agencia = agencia;
         }
 
