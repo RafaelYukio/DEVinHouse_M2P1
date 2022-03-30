@@ -4,6 +4,7 @@ using M2P1.Fintech.Interfaces;
 using M2P1.Fintech.Repositories;
 using M2P1.FintechApp;
 using Microsoft.Extensions.DependencyInjection;
+using System.Globalization;
 
 #region Resolvendo Injeção de Dependencia
 
@@ -175,8 +176,8 @@ void AcessarConta()
         }
         if (_fintechApp.RetornarTipoConta(contaNumero) == typeof(ContaPoupanca))
         {
-            Console.WriteLine("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}{12}{13}{14}{15}", "1 - Saque", Environment.NewLine, "2 - Depósito", Environment.NewLine, "3 - Aplicar poupança", Environment.NewLine, "4 - Simular poupança", Environment.NewLine, "5 - Transferência",
-            Environment.NewLine, "6 - Saldo", Environment.NewLine, "7 - Extrato", Environment.NewLine, "8 - Informações da conta", Environment.NewLine, "9 - Alterar dados", Environment.NewLine, "10 - Voltar ao menu principal", Environment.NewLine);
+            Console.WriteLine("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}{12}{13}{14}{15}{16}{17}", "1 - Saque", Environment.NewLine, "2 - Depósito", Environment.NewLine, "3 - Aplicar poupança", Environment.NewLine, "4 - Resgatar poupança", Environment.NewLine, "5 - Simular poupança", Environment.NewLine, "6 - Transferência",
+            Environment.NewLine, "7 - Saldo", Environment.NewLine, "8 - Extrato", Environment.NewLine, "9 - Informações da conta", Environment.NewLine, "10 - Alterar dados", Environment.NewLine, "11 - Voltar ao menu principal", Environment.NewLine);
 
             opcao = Console.ReadLine();
 
@@ -196,29 +197,33 @@ void AcessarConta()
                     break;
                 case "4":
                     Console.Clear();
-                    SimularPoupanca(contaNumero.ToString());
+                    ResgatarPoupanca(contaNumero.ToString());
                     break;
                 case "5":
                     Console.Clear();
-                    Transferencia(contaNumero.ToString());
+                    SimularPoupanca(contaNumero.ToString());
                     break;
                 case "6":
                     Console.Clear();
-                    SaldoConta(contaNumero.ToString());
+                    Transferencia(contaNumero.ToString());
                     break;
                 case "7":
                     Console.Clear();
-                    RetornarExtrato(contaNumero.ToString());
+                    SaldoConta(contaNumero.ToString());
                     break;
                 case "8":
                     Console.Clear();
-                    RetornarConta(contaNumero.ToString());
+                    RetornarExtrato(contaNumero.ToString());
                     break;
                 case "9":
                     Console.Clear();
-                    AlterarDados(contaNumero.ToString());
+                    RetornarConta(contaNumero.ToString());
                     break;
                 case "10":
+                    Console.Clear();
+                    AlterarDados(contaNumero.ToString());
+                    break;
+                case "11":
                     Console.Clear();
                     MenuPrincipal();
                     break;
@@ -287,23 +292,40 @@ void AplicarPoupanca(string id)
     }
 }
 
+void ResgatarPoupanca(string id)
+{
+    decimal valor;
+
+    Console.WriteLine("Digite o valor do resgate:");
+    if (Decimal.TryParse(Console.ReadLine(), out valor))
+    {
+        _fintechApp.ResgatarPoupanca(id, valor);
+        MenuPrincipal();
+    }
+    else
+    {
+        Console.WriteLine("Valor inválido!");
+        MenuPrincipal();
+    }
+}
+
 void SimularPoupanca(string id)
 {
     decimal valor;
-    DateTime dataResgate;
+    DateOnly dataResgate;
     double rendimento;
 
     Console.WriteLine("Digite o valor do depósito:");
     if (Decimal.TryParse(Console.ReadLine(), out valor))
     {
-        Console.WriteLine("Digite a data de resgate (dd/mm/aa):");
-        dataResgate = DateTime.Parse(Console.ReadLine());
-
-        Console.WriteLine("Digite o rendimento anual da poupança (%):");
-        if (double.TryParse(Console.ReadLine(), out rendimento))
+        Console.WriteLine("Digite a data de resgate (dd/mm/aaaa):");
+        if (DateOnly.TryParseExact(Console.ReadLine(),"dd/MM/yyyy", CultureInfo.InvariantCulture,  DateTimeStyles.None,out dataResgate))
         {
-            _fintechApp.SimularRendimentoPoupanca(id, valor, dataResgate, Math.Pow(1 + rendimento/100, -12));
-
+            Console.WriteLine("Digite o rendimento anual da poupança (%):");
+            if (double.TryParse(Console.ReadLine(), out rendimento))
+            {
+                _fintechApp.SimularRendimentoPoupanca(id, valor, dataResgate, (decimal)Math.Pow(rendimento / 100 + 1, 1.0 / 12));
+            }
         }
     }
     else

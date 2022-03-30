@@ -340,7 +340,7 @@ namespace M2P1.FintechApp
             dynamic conta = _contaRepository.RetornarDado(id);
             decimal valorSimulacaoRendimentoPoupanca = conta.SimulacaoRendimento(valor, dataResgate, rendimento);
 
-            Console.WriteLine($"Rendimento simulado na conta numero {id}, valor de {valorSimulacaoRendimentoPoupanca}");
+            Console.WriteLine($"Valor aplicado hoje de R$ {valor}, será de R$ {valorSimulacaoRendimentoPoupanca.ToString("0.00")} em {dataResgate.ToString("yyyy/MM/dd")}");
         }
         public void AplicarPoupanca(string id, decimal valor)
         {
@@ -369,12 +369,23 @@ namespace M2P1.FintechApp
             }
 
             dynamic conta = _contaRepository.RetornarDado(id);
-            conta.ResgatarPoupanca(valor);
 
-            Investimento investimento = new Investimento(TipoTransacaoEnum.Resgate, "Resgate Poupança", TipoAplicacoEnum.Poupanca, valor);
-            investimento.Resgatar();
+            if (valor > conta.RetornarValorPoupanca())
+            {
+                Console.WriteLine($"Falha no resgate, valor maior que o disponível!");
+            }
+            else
+            {
+                conta.ResgatarPoupanca(valor);
 
-            _contaRepository.AdicionarTransacao(id, investimento);
+                Investimento investimento = new Investimento(TipoTransacaoEnum.Resgate, "Resgate Poupança", TipoAplicacoEnum.Poupanca, valor);
+                investimento.Resgatar();
+
+                _contaRepository.AdicionarTransacao(id, investimento);
+
+                Console.WriteLine($"Resgate na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
+            }
+
         }
 
         public void SimularRendimentoLCI(string id, decimal valor, DateOnly dataAplicacao, DateOnly dataResgate)
@@ -467,14 +478,22 @@ namespace M2P1.FintechApp
             }
 
             dynamic conta = _contaRepository.RetornarDado(id);
-            conta.ResgatarLCI(valor);
 
-            Investimento investimento = new Investimento(TipoTransacaoEnum.Resgate, "Resgate LCI", TipoAplicacoEnum.LCI, valor);
-            investimento.Resgatar();
+            if (valor > conta.RetornarValorLCI())
+            {
+                Console.WriteLine($"Falha no resgate, valor maior que o disponível!");
+            }
+            else
+            {
+                conta.ResgatarLCI(valor);
 
-            _contaRepository.AdicionarTransacao(id, investimento);
+                Investimento investimento = new Investimento(TipoTransacaoEnum.Resgate, "Resgate LCI", TipoAplicacoEnum.LCI, valor);
+                investimento.Resgatar();
 
-            Console.WriteLine($"Resgate na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
+                _contaRepository.AdicionarTransacao(id, investimento);
+
+                Console.WriteLine($"Resgate na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
+            }
         }
         public void ResgatarLCA(string id, decimal valor)
         {
@@ -485,14 +504,22 @@ namespace M2P1.FintechApp
             }
 
             dynamic conta = _contaRepository.RetornarDado(id);
-            conta.ResgatarLCA(valor);
 
-            Investimento investimento = new Investimento(TipoTransacaoEnum.Resgate, "Resgate LCA", TipoAplicacoEnum.LCA, valor);
-            investimento.Resgatar();
+            if (valor > conta.RetornarValorLCA())
+            {
+                Console.WriteLine($"Falha no resgate, valor maior que o disponível!");
+            }
+            else
+            {
+                conta.ResgatarLCA(valor);
 
-            _contaRepository.AdicionarTransacao(id, investimento);
+                Investimento investimento = new Investimento(TipoTransacaoEnum.Resgate, "Resgate LCA", TipoAplicacoEnum.LCA, valor);
+                investimento.Resgatar();
 
-            Console.WriteLine($"Resgate na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
+                _contaRepository.AdicionarTransacao(id, investimento);
+
+                Console.WriteLine($"Resgate na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
+            }
         }
         public void ResgatarCDB(string id, decimal valor)
         {
@@ -503,14 +530,22 @@ namespace M2P1.FintechApp
             }
 
             dynamic conta = _contaRepository.RetornarDado(id);
-            conta.ResgatarCDB(valor);
 
-            Investimento investimento = new Investimento(TipoTransacaoEnum.Resgate, "Resgate CDB", TipoAplicacoEnum.CDB, valor);
-            investimento.Resgatar();
+            if (valor > conta.RetornarValorCDB())
+            {
+                Console.WriteLine($"Falha no resgate, valor maior que o disponível!");
+            }
+            else
+            {
+                conta.ResgatarCDB(valor);
 
-            _contaRepository.AdicionarTransacao(id, investimento);
+                Investimento investimento = new Investimento(TipoTransacaoEnum.Resgate, "Resgate CDB", TipoAplicacoEnum.CDB, valor);
+                investimento.Resgatar();
 
-            Console.WriteLine($"Resgate na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
+                _contaRepository.AdicionarTransacao(id, investimento);
+
+                Console.WriteLine($"Resgate na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
+            }
         }
 
         public Type RetornarTipoConta(string id) => _contaRepository.RetornarDado(id).GetType();
@@ -587,7 +622,15 @@ namespace M2P1.FintechApp
                 }
                 if (transacao.GetType() == typeof(Investimento))
                 {
-                    Console.WriteLine($"Tipo: {transacao.TipoTransacao}, Descrição: {transacao.Descricao}, Valor: {transacao.Valor}, Tipo: {transacao.TipoAplicacao}, Data Aplicacão: {transacao.DataAplicacao}, Data Resgate: {transacao.DataResgate}");
+                    if(transacao.DataAplicacao == null)
+                    {
+                        Console.WriteLine($"Tipo: {transacao.TipoTransacao}, Descrição: {transacao.Descricao}, Valor: {transacao.Valor}, Tipo: {transacao.TipoAplicacao}, Data Resgate: {transacao.DataResgate}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Tipo: {transacao.TipoTransacao}, Descrição: {transacao.Descricao}, Valor: {transacao.Valor}, Tipo: {transacao.TipoAplicacao}, Data Aplicacão: {transacao.DataAplicacao}");
+                    }
+                    
                 }
             }
 
