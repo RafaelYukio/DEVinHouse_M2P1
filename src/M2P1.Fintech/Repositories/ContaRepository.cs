@@ -53,12 +53,12 @@ namespace M2P1.Fintech.Repositories
             {
                 if (conta.GetType() == typeof(ContaPoupanca))
                 {
-                    totalInvestido += conta.ValorPoupanca();
+                    totalInvestido += conta.RetornarValorPoupanca();
                 }
 
                 if (conta.GetType() == typeof(ContaInvestimento))
                 {
-                    totalInvestido += conta.ValorLCI() + conta.ValorLCA() + conta.ValorCDB();
+                    totalInvestido += conta.RetornarValorLCI() + conta.RetornarValorLCA() + conta.RetornarValorCDB();
                 }
             }
 

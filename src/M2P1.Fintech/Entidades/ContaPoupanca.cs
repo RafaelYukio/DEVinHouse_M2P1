@@ -14,14 +14,11 @@ namespace M2P1.Fintech.Entidades
             ValorAplicacoPoupanca = 0;
         }
 
-        private decimal SimulacaoRendimentoPorMes(DateOnly dataResgate, decimal valorRendimento)
+        private decimal SimulacaoRendimentoPorMes(DateOnly dataResgate, DateOnly dataAntiga, decimal valorRendimento)
         {
             decimal rendimentoTotal = 1.00M;
 
-            DateTime dataHoje = DateTime.Now;
-            DateTime dataRetirada = dataResgate.ToDateTime(new TimeOnly(0, 0));
-
-            int meses = ((dataRetirada.Year - dataHoje.Year) * 12) + dataRetirada.Month - dataHoje.Month;
+            int meses = ((dataResgate.Year - dataAntiga.Year) * 12) + dataResgate.Month - dataAntiga.Month;
 
             for (int i = 0; i < meses; i++)
             {
@@ -31,7 +28,7 @@ namespace M2P1.Fintech.Entidades
             return rendimentoTotal;
 
         }
-        public decimal SimulacaoRendimento(decimal valor, DateOnly dataResgate, decimal rendimento) => valor * SimulacaoRendimentoPorMes(dataResgate, rendimento);
+        public decimal SimulacaoRendimento(decimal valor, DateOnly dataResgate, decimal rendimento) => valor * SimulacaoRendimentoPorMes(dataResgate, DateOnly.FromDateTime(DateTime.Now), rendimento);
         public void AplicarPoupanca(decimal valor)
         {
             ValorAplicacoPoupanca += valor;
@@ -41,9 +38,9 @@ namespace M2P1.Fintech.Entidades
             ValorAplicacoPoupanca -= valor;
         }
         public decimal RetornarValorPoupanca() => ValorAplicacoPoupanca;
-        public void Render(DateOnly novaData)
+        public void Render(DateOnly dataNova, DateOnly dataAntiga)
         {
-            ValorAplicacoPoupanca = SimulacaoRendimento(ValorAplicacoPoupanca, novaData, ValorRendimentoPoupanca);
+            ValorAplicacoPoupanca = ValorAplicacoPoupanca * SimulacaoRendimentoPorMes(dataNova, dataAntiga, ValorRendimentoPoupanca);
         }
 
 

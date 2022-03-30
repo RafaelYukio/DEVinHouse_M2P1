@@ -45,9 +45,9 @@ namespace M2P1.Fintech.Entidades
             return rendimentoTotal;
 
         }
-        public decimal SimulacaoRendimentoLCI(decimal valor, DateOnly dataAplicacao, DateOnly dataResgate) => valor * SimulacaoRendimentoPorDia(dataAplicacao, dataResgate, ValorRendimentoLCI);
-        public decimal SimulacaoRendimentoLCA(decimal valor, DateOnly dataAplicacao, DateOnly dataResgate) => valor * SimulacaoRendimentoPorDia(dataAplicacao, dataResgate, ValorRendimentoLCA);
-        public decimal SimulacaoRendimentoCDB(decimal valor, DateOnly dataAplicacao, DateOnly dataResgate) => valor * SimulacaoRendimentoPorDia(dataAplicacao, dataResgate, ValorRendimentoCDB);
+        public decimal SimularRendimentoLCI(decimal valor, DateOnly dataAplicacao, DateOnly dataResgate) => valor * SimulacaoRendimentoPorDia(dataAplicacao, dataResgate, ValorRendimentoLCI);
+        public decimal SimularRendimentoLCA(decimal valor, DateOnly dataAplicacao, DateOnly dataResgate) => valor * SimulacaoRendimentoPorDia(dataAplicacao, dataResgate, ValorRendimentoLCA);
+        public decimal SimularRendimentoCDB(decimal valor, DateOnly dataAplicacao, DateOnly dataResgate) => valor * SimulacaoRendimentoPorDia(dataAplicacao, dataResgate, ValorRendimentoCDB);
 
         public void AplicarLCI(decimal valor)
         {
@@ -79,11 +79,11 @@ namespace M2P1.Fintech.Entidades
         public decimal RetornarValorLCA() => ValorAplicacoLCA;
         public decimal RetornarValorCDB() => ValorAplicacoCDB;
 
-        public void Render(DateOnly novaData)
+        public void Render(DateOnly dataNova, DateOnly dataAntiga)
         {
-            ValorAplicacoLCI = SimulacaoRendimentoLCI(ValorAplicacoLCI, DateOnly.FromDateTime(DateTime.Now), novaData);
-            ValorAplicacoLCA = SimulacaoRendimentoLCA(ValorAplicacoLCA, DateOnly.FromDateTime(DateTime.Now), novaData);
-            ValorAplicacoCDB = SimulacaoRendimentoCDB(ValorAplicacoCDB, DateOnly.FromDateTime(DateTime.Now), novaData);
+            ValorAplicacoLCI = SimularRendimentoLCI(ValorAplicacoLCI, dataAntiga, dataNova);
+            ValorAplicacoLCA = SimularRendimentoLCA(ValorAplicacoLCA, dataAntiga, dataNova);
+            ValorAplicacoCDB = SimularRendimentoCDB(ValorAplicacoCDB, dataAntiga, dataNova);
         }
 
     }

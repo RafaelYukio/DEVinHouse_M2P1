@@ -4,7 +4,7 @@ namespace M2P1.Fintech.Interfaces
 {
     public interface IBaseRepository<T> where T : BaseFintech
     {
-        public DateTime RetornarDataRepository();
+        public DateTime RetornarData();
         public void MudarData(DateTime novaData);
         public void AdicionarDado(T dado);
         public void ApagarDado(string id);

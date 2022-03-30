@@ -14,7 +14,7 @@ namespace M2P1.Fintech.Repositories
             Data = DateTime.Now;
         }
 
-        public DateTime RetornarDataRepository() => Data;
+        public DateTime RetornarData() => Data;
         public void MudarData(DateTime novaData)
         {
             Data = novaData;
