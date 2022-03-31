@@ -19,6 +19,7 @@ namespace M2P1.Fintech.Repositories
         {
             Data = novaData;
         }
+
         public void AdicionarDado(T dado) => Dados.Add(dado);
         public void ApagarDado(string id) => Dados.Remove(RetornarDado(id));
         public T RetornarDado(string id) =>

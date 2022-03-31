@@ -6,6 +6,7 @@ namespace M2P1.Fintech.Entidades
     {
         public decimal ValorRendimentoPoupanca { get; private set; }
         public decimal ValorAplicacoPoupanca { get; private set; }
+
         public ContaPoupanca(string id, string nome, string cpf, string endereco, decimal rendaMensal, int contaNumero, AgenciaEnum agencia)
             : base(id, nome, cpf, endereco, rendaMensal, contaNumero, agencia)
         {
@@ -29,20 +30,15 @@ namespace M2P1.Fintech.Entidades
 
         }
         public decimal SimulacaoRendimento(decimal valor, DateOnly dataResgate, decimal rendimento) => valor * SimulacaoRendimentoPorMes(dataResgate, DateOnly.FromDateTime(DateTime.Now), rendimento);
-        public void AplicarPoupanca(decimal valor)
-        {
-            ValorAplicacoPoupanca += valor;
-        }
-        public void ResgatarPoupanca(decimal valor)
-        {
-            ValorAplicacoPoupanca -= valor;
-        }
+        
+        public void AplicarPoupanca(decimal valor) => ValorAplicacoPoupanca += valor;
+        public void ResgatarPoupanca(decimal valor) => ValorAplicacoPoupanca -= valor;
+
         public decimal RetornarValorPoupanca() => ValorAplicacoPoupanca;
         public void Render(DateOnly dataNova, DateOnly dataAntiga)
         {
             ValorAplicacoPoupanca = ValorAplicacoPoupanca * SimulacaoRendimentoPorMes(dataNova, dataAntiga, ValorRendimentoPoupanca);
         }
-
 
     }
 }

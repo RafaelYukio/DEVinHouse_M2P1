@@ -49,31 +49,13 @@ namespace M2P1.Fintech.Entidades
         public decimal SimularRendimentoLCA(decimal valor, DateOnly dataAplicacao, DateOnly dataResgate) => valor * SimulacaoRendimentoPorDia(dataAplicacao, dataResgate, ValorRendimentoLCA);
         public decimal SimularRendimentoCDB(decimal valor, DateOnly dataAplicacao, DateOnly dataResgate) => valor * SimulacaoRendimentoPorDia(dataAplicacao, dataResgate, ValorRendimentoCDB);
 
-        public void AplicarLCI(decimal valor)
-        {
-            ValorAplicacoLCI += valor;
-        }
-        public void AplicarLCA(decimal valor)
-        {
-            ValorAplicacoLCA += valor;
-        }
-        public void AplicarCDB(decimal valor)
-        {
-            ValorAplicacoCDB += valor;
-        }
+        public void AplicarLCI(decimal valor) => ValorAplicacoLCI += valor;
+        public void AplicarLCA(decimal valor) => ValorAplicacoLCA += valor;
+        public void AplicarCDB(decimal valor) => ValorAplicacoCDB += valor;
 
-        public void ResgatarLCI(decimal valor)
-        {
-            ValorAplicacoLCI -= valor;
-        }
-        public void ResgatarLCA(decimal valor)
-        {
-            ValorAplicacoLCA -= valor;
-        }
-        public void ResgatarCDB(decimal valor)
-        {
-            ValorAplicacoCDB -= valor;
-        }
+        public void ResgatarLCI(decimal valor) => ValorAplicacoLCI -= valor;
+        public void ResgatarLCA(decimal valor) => ValorAplicacoLCA -= valor;
+        public void ResgatarCDB(decimal valor) => ValorAplicacoCDB -= valor;
 
         public decimal RetornarValorLCI() => ValorAplicacoLCI;
         public decimal RetornarValorLCA() => ValorAplicacoLCA;

@@ -26,7 +26,6 @@ Console.WriteLine("Bem vindo ao Banco Banco!");
 
 bool VerificaConta(string contaNumero) => _fintechApp.VerificaContaNumero(contaNumero);
 
-
 void MenuPrincipal()
 {
     string stringOpcao;
@@ -34,39 +33,33 @@ void MenuPrincipal()
 
     Console.WriteLine("");
     Console.WriteLine("{0}{1}", "Escolha uma das opções:", Environment.NewLine);
-    Console.WriteLine("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}{12}{13}", "1 - Criar Conta", Environment.NewLine, "2 - Acessar conta", Environment.NewLine, "3 - Simular investimento", Environment.NewLine,
-    "4 - Relatórios", Environment.NewLine, "5 - Exibir Contas", Environment.NewLine, "6 - Exibir Total Investido", Environment.NewLine, "7 - Alterar data do sistema", Environment.NewLine);
-
+    Console.WriteLine("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}", "1 - Criar conta", Environment.NewLine, "2 - Acessar conta", Environment.NewLine,
+    "3 - Relatórios", Environment.NewLine, "4 - Exibir contas", Environment.NewLine, "5 - Exibir total investido", Environment.NewLine, "6 - Alterar data do sistema", Environment.NewLine);
 
     stringOpcao = Console.ReadLine();
+
+    Console.Clear();
 
     if (Int32.TryParse(stringOpcao, out opcao) && opcao > 0 && opcao < 8)
     {
         switch (opcao)
         {
             case 1:
-                Console.Clear();
                 CriarConta();
                 break;
-
             case 2:
-                Console.Clear();
                 AcessarConta();
                 break;
-            case 4:
-                Console.Clear();
+            case 3:
                 Relatorios();
                 break;
-            case 5:
-                Console.Clear();
+            case 4:
                 RetornarContas();
                 break;
-            case 6:
-                Console.Clear();
-                _fintechApp.RetornarTotalInvestido();
+            case 5:
+                RetornarTotalInvestido();
                 break;
-            case 7:
-                Console.Clear();
+            case 6:
                 AlterarData();
                 break;
         }
@@ -90,12 +83,13 @@ void CriarConta()
 
     Console.WriteLine("");
     Console.WriteLine("{0}{1}", "Escolha uma das opções:", Environment.NewLine);
-    Console.WriteLine("{0}{1}{2}{3}{4}{5}{6}{7}", "1 - Criar Conta Corrente", Environment.NewLine, "2 - Criar Conta Poupança", Environment.NewLine, "3 - Criar Conta Investimento", Environment.NewLine, "4 - Voltar", Environment.NewLine);
+    Console.WriteLine("{0}{1}{2}{3}{4}{5}{6}{7}", "1 - Criar conta corrente", Environment.NewLine, "2 - Criar conta poupança", Environment.NewLine, "3 - Criar conta investimento (LCI/LCA/CDB)", Environment.NewLine, "4 - Voltar no menu principal", Environment.NewLine);
 
     opcao = Console.ReadLine();
 
     if (opcao == "4")
     {
+        Console.Clear();
         MenuPrincipal();
     }
 
@@ -107,26 +101,36 @@ void CriarConta()
     Console.WriteLine("Digite seu endereço:");
     endereco = Console.ReadLine();
     Console.WriteLine("Digite sua renda mensal:");
-    rendaMensal = Decimal.Parse(Console.ReadLine());
-
-    Console.Clear();
-
-    switch (opcao)
+    if(Decimal.TryParse(Console.ReadLine(), out rendaMensal))
     {
-        case "1":
-            _fintechApp.CriarContaCorrente(nome, cpf, endereco, rendaMensal);
-            break;
+        Console.Clear();
 
-        case "2":
-            _fintechApp.CriarContaPoupanca(nome, cpf, endereco, rendaMensal);
-            break;
+        switch (opcao)
+        {
+            case "1":
+                _fintechApp.CriarContaCorrente(nome, cpf, endereco, rendaMensal);
+                break;
 
-        case "3":
-            _fintechApp.CriarContaInvestimento(nome, cpf, endereco, rendaMensal);
-            break;
+            case "2":
+                _fintechApp.CriarContaPoupanca(nome, cpf, endereco, rendaMensal);
+                break;
+
+            case "3":
+                _fintechApp.CriarContaInvestimento(nome, cpf, endereco, rendaMensal);
+                break;
+        }
+
+        MenuPrincipal();
+    } else
+    {
+        Console.Clear();
+
+        Console.WriteLine("Valor de renda mensal inválido!");
+
+        MenuPrincipal();
     }
 
-    MenuPrincipal();
+
 }
 
 void AcessarConta()
@@ -413,8 +417,10 @@ void AplicarInvestimento(string id)
     Console.WriteLine("Digite o valor da aplicação:");
     if (Decimal.TryParse(Console.ReadLine(), out valor))
     {
-        Console.WriteLine("{0}{1}{2}{3}{4}{5}{6}{7}{8}", Environment.NewLine, "Escolha o tipo de investimento:", Environment.NewLine, "1 - LCI", Environment.NewLine, "2 - LCA", Environment.NewLine, "3 - CDB", Environment.NewLine);
+        Console.WriteLine("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}", Environment.NewLine, "Escolha o tipo de investimento:", Environment.NewLine, "1 - LCI", Environment.NewLine, "2 - LCA", Environment.NewLine, "3 - CDB", Environment.NewLine, "4 - Voltar no menu principal", Environment.NewLine);
         opcao = Console.ReadLine();
+
+        Console.Clear();
 
         switch (opcao)
         {
@@ -426,6 +432,9 @@ void AplicarInvestimento(string id)
                 break;
             case "3":
                 _fintechApp.AplicarCDB(id, valor);
+                break;
+            case "4":
+                MenuPrincipal();
                 break;
         }
 
@@ -446,8 +455,10 @@ void ResgatarInvestimento(string id)
     Console.WriteLine("Digite o valor do resgate:");
     if (Decimal.TryParse(Console.ReadLine(), out valor))
     {
-        Console.WriteLine("{0}{1}{2}{3}{4}{5}{6}{7}{8}", Environment.NewLine, "Escolha o tipo de investimento:", Environment.NewLine, "1 - LCI", Environment.NewLine, "2 - LCA", Environment.NewLine, "3 - CDB", Environment.NewLine);
+        Console.WriteLine("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}", Environment.NewLine, "Escolha o tipo de investimento:", Environment.NewLine, "1 - LCI", Environment.NewLine, "2 - LCA", Environment.NewLine, "3 - CDB", Environment.NewLine, "4 - Voltar no menu principal", Environment.NewLine);
         opcao = Console.ReadLine();
+
+        Console.Clear();
 
         switch (opcao)
         {
@@ -459,6 +470,9 @@ void ResgatarInvestimento(string id)
                 break;
             case "3":
                 _fintechApp.ResgatarCDB(id, valor);
+                break;
+            case "4":
+                MenuPrincipal();
                 break;
         }
 
@@ -489,8 +503,10 @@ void SimularInvestimento(string id)
             Console.WriteLine("Digite a data do resgate (dd/mm/aaaa):");
             if (DateOnly.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dataResgate))
             {
-                Console.WriteLine("{0}{1}{2}{3}{4}{5}{6}{7}{8}", Environment.NewLine, "Escolha o tipo de investimento:", Environment.NewLine, "1 - LCI", Environment.NewLine, "2 - LCA", Environment.NewLine, "3 - CDB", Environment.NewLine);
+                Console.WriteLine("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}", Environment.NewLine, "Escolha o tipo de investimento:", Environment.NewLine, "1 - LCI", Environment.NewLine, "2 - LCA", Environment.NewLine, "3 - CDB", Environment.NewLine, "4 - Voltar no menu principal", Environment.NewLine);
                 opcao = Console.ReadLine();
+
+                Console.Clear();
 
                 switch (opcao)
                 {
@@ -502,6 +518,9 @@ void SimularInvestimento(string id)
                         break;
                     case "3":
                         _fintechApp.SimularRendimentoCDB(id, valor, dataAplicacao, dataResgate);
+                        break;
+                    case "4":
+                        MenuPrincipal();
                         break;
                 }
 
@@ -579,16 +598,24 @@ void RetornarTransferencias()
     _fintechApp.RetornarTransferencias();
 }
 
+void RetornarTotalInvestido()
+{
+    _fintechApp.RetornarTotalInvestido();
+    MenuPrincipal();
+}
+
 
 void Relatorios()
 {
     string opcao;
 
     Console.WriteLine("{0}{1}", "Escolha uma das opções para exibir:", Environment.NewLine);
-    Console.WriteLine("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}", "1 - Contas correntes", Environment.NewLine, "2 - Contas poupança", Environment.NewLine, "3 - Contas investimento", Environment.NewLine,
-    "4 - Contas com saldo negativo", Environment.NewLine, "5 - Total investido", Environment.NewLine, "6 - Transações da conta", Environment.NewLine, "7 - Transferências", Environment.NewLine);
+    Console.WriteLine("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}{12}{13}{14}{15}", "1 - Contas correntes", Environment.NewLine, "2 - Contas poupança", Environment.NewLine, "3 - Contas investimento", Environment.NewLine,
+    "4 - Contas com saldo negativo", Environment.NewLine, "5 - Total investido", Environment.NewLine, "6 - Transações da conta", Environment.NewLine, "7 - Todas as transferências", Environment.NewLine, "8 - Voltar no menu principal", Environment.NewLine);
 
     opcao = Console.ReadLine();
+
+    Console.Clear();
 
     switch (opcao)
     {
@@ -618,6 +645,9 @@ void Relatorios()
             break;
         case "7":
             _fintechApp.RetornarTransferencias();
+            break;
+        case "8":
+            MenuPrincipal();
             break;
     }
 
