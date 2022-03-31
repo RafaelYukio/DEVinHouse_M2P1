@@ -1,2 +1,2 @@
 # DEVinHouse_M2P1
-Projeto 1 - Módulo2 do curso DEVinHouse (SENAI) 
+Projeto 1 - Módulo 2 do curso DEVinHouse (SENAI) 
