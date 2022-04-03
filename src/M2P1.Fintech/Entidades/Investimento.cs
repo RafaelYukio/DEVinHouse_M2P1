@@ -8,7 +8,7 @@ namespace M2P1.Fintech.Entidades
         public TipoAplicacoEnum TipoAplicacao { get; private set; }
         public DateTime? DataAplicacao { get; private set; }
         public DateTime? DataResgate { get; private set; }
-        public Investimento(TipoTransacaoEnum tipoTransacao, string descricao, TipoAplicacoEnum tipoAplicacao, decimal valor) : base(tipoTransacao, descricao, valor)
+        public Investimento(TipoTransacaoEnum tipoTransacao, string descricao, TipoAplicacoEnum tipoAplicacao, decimal valor, DateTime data) : base(tipoTransacao, descricao, valor, data)
         {
             TipoAplicacao = tipoAplicacao;
         }

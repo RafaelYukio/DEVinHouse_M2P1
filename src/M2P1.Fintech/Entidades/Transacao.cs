@@ -9,12 +9,12 @@ namespace M2P1.Fintech.Entidades
         public decimal Valor { get; private set; }
         public DateTime Data { get; private set; }
 
-        public Transacao(TipoTransacaoEnum tipoTransacao, string descricao, decimal valor)
+        public Transacao(TipoTransacaoEnum tipoTransacao, string descricao, decimal valor, DateTime data)
         {
             TipoTransacao = tipoTransacao;
             Descricao = descricao;
             Valor = valor;
-            Data = DateTime.Now;
+            Data = data;
         }
     }
 }

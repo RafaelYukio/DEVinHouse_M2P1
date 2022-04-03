@@ -22,7 +22,7 @@ var _fintechApp = new FuncoesFintech(_ContaRepository, _TransferenciaRepository)
 
 #endregion
 
-Console.WriteLine("Bem vindo ao Banco Banco!");
+Console.WriteLine("Bem vindo!");
 
 bool VerificaConta(string contaNumero) => _fintechApp.VerificaContaNumero(contaNumero);
 
@@ -31,7 +31,7 @@ void MenuPrincipal()
     string stringOpcao;
     int opcao;
 
-    Console.WriteLine("");
+    Console.WriteLine("{0}{1}", Environment.NewLine, $"Menu Principal! Banco Banco (data do sistema: {_fintechApp.RetornarData().ToString("dd/MM/yyyy")})");
     Console.WriteLine("{0}{1}", "Escolha uma das opções:", Environment.NewLine);
     Console.WriteLine("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}", "1 - Criar conta", Environment.NewLine, "2 - Acessar conta", Environment.NewLine,
     "3 - Relatórios", Environment.NewLine, "4 - Exibir contas", Environment.NewLine, "5 - Exibir total investido", Environment.NewLine, "6 - Alterar data do sistema", Environment.NewLine);

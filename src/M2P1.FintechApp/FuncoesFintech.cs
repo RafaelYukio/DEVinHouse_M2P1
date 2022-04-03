@@ -15,11 +15,7 @@ namespace M2P1.FintechApp
             _transferenciaRepository = TransferenciaRepository;
         }
 
-        public void RetornarData()
-        {
-            Console.WriteLine(_contaRepository.RetornarData());
-            Console.WriteLine(_transferenciaRepository.RetornarData());
-        }
+        public DateTime RetornarData() => _contaRepository.RetornarData();
         public void MudarDataERender(DateTime dataNova)
         {
             DateTime dataAntiga;
@@ -190,7 +186,7 @@ namespace M2P1.FintechApp
                         Console.WriteLine($"Saque na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
                     }
                     conta.Saque(valor);
-                    _contaRepository.AdicionarTransacao(id, new Transacao(TipoTransacaoEnum.Saque, "Saque", valor));
+                    _contaRepository.AdicionarTransacao(id, new Transacao(TipoTransacaoEnum.Saque, "Saque", valor, _contaRepository.RetornarData()));
                 }
                 else
                 {
@@ -202,7 +198,7 @@ namespace M2P1.FintechApp
                 if (valor <= conta.Saldo())
                 {
                     conta.Saque(valor);
-                    _contaRepository.AdicionarTransacao(id, new Transacao(TipoTransacaoEnum.Saque, "Saque", valor));
+                    _contaRepository.AdicionarTransacao(id, new Transacao(TipoTransacaoEnum.Saque, "Saque", valor, _contaRepository.RetornarData()));
 
                     Console.WriteLine($"Saque na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
                 }
@@ -239,13 +235,13 @@ namespace M2P1.FintechApp
                     Console.WriteLine($"Depósito na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
                 }
                 conta.Deposito(valor);
-                _contaRepository.AdicionarTransacao(id, new Transacao(TipoTransacaoEnum.Deposito, "Depósito", valor));
+                _contaRepository.AdicionarTransacao(id, new Transacao(TipoTransacaoEnum.Deposito, "Depósito", valor, _contaRepository.RetornarData()));
 
             }
             else
             {
                 conta.Deposito(valor);
-                _contaRepository.AdicionarTransacao(id, new Transacao(TipoTransacaoEnum.Deposito, "Depósito", valor));
+                _contaRepository.AdicionarTransacao(id, new Transacao(TipoTransacaoEnum.Deposito, "Depósito", valor, _contaRepository.RetornarData()));
 
                 Console.WriteLine($"Depósito na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
             }
@@ -253,7 +249,7 @@ namespace M2P1.FintechApp
         }
         public void TransferenciaConta(string idOrigem, string idDestino, decimal valor)
         {
-            DayOfWeek data = DateTime.Now.DayOfWeek;
+            DayOfWeek data = _contaRepository.RetornarData().DayOfWeek;
 
             if (data == DayOfWeek.Saturday || data == DayOfWeek.Sunday)
             {
@@ -297,7 +293,7 @@ namespace M2P1.FintechApp
 
                         contaDestino.Deposito(valor);
 
-                        Transferencia transferecia = new Transferencia(TipoTransacaoEnum.Transferencia, "Transferência", valor, contaOrigem, contaDestino);
+                        Transferencia transferecia = new Transferencia(TipoTransacaoEnum.Transferencia, "Transferência", valor, _contaRepository.RetornarData(), contaOrigem, contaDestino);
 
                         _contaRepository.AdicionarTransacao(idOrigem, transferecia);
                         _contaRepository.AdicionarTransacao(idDestino, transferecia);
@@ -317,7 +313,7 @@ namespace M2P1.FintechApp
                         contaOrigem.Saque(valor);
                         contaDestino.Deposito(valor);
 
-                        Transferencia transferecia = new Transferencia(TipoTransacaoEnum.Transferencia, "Transferência", valor, contaOrigem, contaDestino);
+                        Transferencia transferecia = new Transferencia(TipoTransacaoEnum.Transferencia, "Transferência", valor, _contaRepository.RetornarData(), contaOrigem, contaDestino);
 
                         _contaRepository.AdicionarTransacao(idOrigem, transferecia);
                         _contaRepository.AdicionarTransacao(idDestino, transferecia);
@@ -352,7 +348,7 @@ namespace M2P1.FintechApp
             dynamic conta = _contaRepository.RetornarDado(id);
             conta.AplicarPoupanca(valor);
 
-            Investimento investimento = new Investimento(TipoTransacaoEnum.Aplicacao, "Aplicação LCI", TipoAplicacoEnum.Poupanca, valor);
+            Investimento investimento = new Investimento(TipoTransacaoEnum.Aplicacao, "Aplicação LCI", TipoAplicacoEnum.Poupanca, valor, _contaRepository.RetornarData());
             investimento.Aplicar();
 
             _contaRepository.AdicionarTransacao(id, investimento);
@@ -377,7 +373,7 @@ namespace M2P1.FintechApp
             {
                 conta.ResgatarPoupanca(valor);
 
-                Investimento investimento = new Investimento(TipoTransacaoEnum.Resgate, "Resgate Poupança", TipoAplicacoEnum.Poupanca, valor);
+                Investimento investimento = new Investimento(TipoTransacaoEnum.Resgate, "Resgate Poupança", TipoAplicacoEnum.Poupanca, valor, _contaRepository.RetornarData());
                 investimento.Resgatar();
 
                 _contaRepository.AdicionarTransacao(id, investimento);
@@ -423,7 +419,7 @@ namespace M2P1.FintechApp
 
             conta.AplicarLCI(valor);
 
-            Investimento investimento = new Investimento(TipoTransacaoEnum.Aplicacao, "Aplicação LCI", TipoAplicacoEnum.LCI, valor);
+            Investimento investimento = new Investimento(TipoTransacaoEnum.Aplicacao, "Aplicação LCI", TipoAplicacoEnum.LCI, valor, _contaRepository.RetornarData());
             investimento.Aplicar();
 
             _contaRepository.AdicionarTransacao(id, investimento);
@@ -442,7 +438,7 @@ namespace M2P1.FintechApp
 
             conta.AplicarLCA(valor);
 
-            Investimento investimento = new Investimento(TipoTransacaoEnum.Aplicacao, "Aplicação LCA", TipoAplicacoEnum.LCA, valor);
+            Investimento investimento = new Investimento(TipoTransacaoEnum.Aplicacao, "Aplicação LCA", TipoAplicacoEnum.LCA, valor, _contaRepository.RetornarData());
             investimento.Aplicar();
 
             _contaRepository.AdicionarTransacao(id, investimento);
@@ -461,7 +457,7 @@ namespace M2P1.FintechApp
 
             conta.AplicarCDB(valor);
 
-            Investimento investimento = new Investimento(TipoTransacaoEnum.Aplicacao, "Aplicação LCA", TipoAplicacoEnum.CDB, valor);
+            Investimento investimento = new Investimento(TipoTransacaoEnum.Aplicacao, "Aplicação LCA", TipoAplicacoEnum.CDB, valor, _contaRepository.RetornarData());
             investimento.Aplicar();
 
             _contaRepository.AdicionarTransacao(id, investimento);
@@ -501,7 +497,7 @@ namespace M2P1.FintechApp
                 {
                     conta.ResgatarLCI(valor);
 
-                    Investimento investimento = new Investimento(TipoTransacaoEnum.Resgate, "Resgate LCI", TipoAplicacoEnum.LCI, valor);
+                    Investimento investimento = new Investimento(TipoTransacaoEnum.Resgate, "Resgate LCI", TipoAplicacoEnum.LCI, valor, _contaRepository.RetornarData());
                     investimento.Resgatar();
 
                     _contaRepository.AdicionarTransacao(id, investimento);
@@ -546,7 +542,7 @@ namespace M2P1.FintechApp
                 {
                     conta.ResgatarLCA(valor);
 
-                    Investimento investimento = new Investimento(TipoTransacaoEnum.Resgate, "Resgate LCA", TipoAplicacoEnum.LCA, valor);
+                    Investimento investimento = new Investimento(TipoTransacaoEnum.Resgate, "Resgate LCA", TipoAplicacoEnum.LCA, valor, _contaRepository.RetornarData());
                     investimento.Resgatar();
 
                     _contaRepository.AdicionarTransacao(id, investimento);
@@ -592,7 +588,7 @@ namespace M2P1.FintechApp
                 {
                     conta.ResgatarCDB(valor);
 
-                    Investimento investimento = new Investimento(TipoTransacaoEnum.Resgate, "Resgate CDB", TipoAplicacoEnum.CDB, valor);
+                    Investimento investimento = new Investimento(TipoTransacaoEnum.Resgate, "Resgate CDB", TipoAplicacoEnum.CDB, valor, _contaRepository.RetornarData());
                     investimento.Resgatar();
 
                     _contaRepository.AdicionarTransacao(id, investimento);
