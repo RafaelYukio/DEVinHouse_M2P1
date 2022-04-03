@@ -1,6 +1,7 @@
 ﻿using M2P1.Fintech.Entidades;
 using M2P1.Fintech.Enums;
 using M2P1.Fintech.Interfaces;
+using System.Text.RegularExpressions;
 
 namespace M2P1.FintechApp
 {
@@ -52,6 +53,80 @@ namespace M2P1.FintechApp
             }
         }
         public bool VerificaValorZero(decimal valor) => valor == 0 ? true : false;
+        public bool VerificaCPF(string cpf)
+        {
+            if (Regex.IsMatch(cpf, @"(^(\d{3}.\d{3}.\d{3}-\d{2})|(\d{11})$)"))
+            {
+                int valorPrimeiroNumero = 0;
+                int valorSegundoNumero = 0;
+
+                bool validaPrimeiroNumero;
+                bool validaSegundoNumero;
+
+                string numerosString = new string(cpf.Where(c => Char.IsDigit(c)).ToArray());
+                char[] numerosStringChars = numerosString.ToCharArray();
+
+                int[] numeros = Array.ConvertAll(numerosStringChars, valor => (int)Char.GetNumericValue(valor));
+
+                for (int i = 0; i < 9; i++)
+                {
+                    valorPrimeiroNumero += numeros[i] * (10 - i);
+                }
+
+                valorPrimeiroNumero = (valorPrimeiroNumero * 10) % 11;
+
+                if (valorPrimeiroNumero == 10)
+                {
+                    valorPrimeiroNumero = 0;
+                }
+
+                if (valorPrimeiroNumero == numeros[9])
+                {
+                    validaPrimeiroNumero = true;
+                }
+                else
+                {
+                    validaPrimeiroNumero = false;
+                }
+
+                for (int i = 0; i < 9; i++)
+                {
+                    valorSegundoNumero += numeros[i] * (11 - i);
+                }
+
+                valorSegundoNumero += valorPrimeiroNumero * 2;
+
+                valorSegundoNumero = (valorSegundoNumero * 10) % 11;
+
+                if (valorSegundoNumero == 10)
+                {
+                    valorSegundoNumero = 0;
+                }
+
+                if (valorSegundoNumero == numeros[10])
+                {
+                    validaSegundoNumero = true;
+                }
+                else
+                {
+                    validaSegundoNumero = false;
+                }
+
+                if (validaPrimeiroNumero == true && validaSegundoNumero == true)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         public void CriarContaCorrente(string nome, string cpf, string endereco, decimal rendaMensal)
         {
@@ -387,25 +462,25 @@ namespace M2P1.FintechApp
         {
             dynamic conta = _contaRepository.RetornarDado(id);
 
-            decimal valorSimulacaoRendimentoLCI = conta.SimulacaoRendimentoLCI(valor, dataAplicacao, dataResgate);
+            decimal valorSimulacaoRendimentoLCI = conta.SimularRendimentoLCI(valor, dataAplicacao, dataResgate);
 
-            Console.WriteLine($"Valor de R$ {valor} será R$ {valorSimulacaoRendimentoLCI}, se aplicado em LCI durante {dataAplicacao.ToString("dd/MM/yyyy")} a {dataResgate.ToString("dd/MM/yyyy")}");
+            Console.WriteLine($"Valor de R$ {valor} será R$ {valorSimulacaoRendimentoLCI.ToString("0.00")}, se aplicado em LCI durante {dataAplicacao.ToString("dd/MM/yyyy")} a {dataResgate.ToString("dd/MM/yyyy")}");
         }
         public void SimularRendimentoLCA(string id, decimal valor, DateOnly dataAplicacao, DateOnly dataResgate)
         {
             dynamic conta = _contaRepository.RetornarDado(id);
 
-            decimal valorSimulacaoRendimentoLCA = conta.SimulacaoRendimentoLCA(valor, dataAplicacao, dataResgate);
+            decimal valorSimulacaoRendimentoLCA = conta.SimularRendimentoLCA(valor, dataAplicacao, dataResgate);
 
-            Console.WriteLine($"Valor de R$ {valor} será R$ {valorSimulacaoRendimentoLCA}, se aplicado em LCI durante {dataAplicacao.ToString("dd/MM/yyyy")} a {dataResgate.ToString("dd/MM/yyyy")}");
+            Console.WriteLine($"Valor de R$ {valor} será R$ {valorSimulacaoRendimentoLCA.ToString("0.00")}, se aplicado em LCI durante {dataAplicacao.ToString("dd/MM/yyyy")} a {dataResgate.ToString("dd/MM/yyyy")}");
         }
         public void SimularRendimentoCDB(string id, decimal valor, DateOnly dataAplicacao, DateOnly dataResgate)
         {
             dynamic conta = _contaRepository.RetornarDado(id);
 
-            decimal valorSimulacaoRendimentoCDB = conta.SimulacaoRendimentoCDB(valor, dataAplicacao, dataResgate);
+            decimal valorSimulacaoRendimentoCDB = conta.SimularRendimentoCDB(valor, dataAplicacao, dataResgate);
 
-            Console.WriteLine($"Valor de R$ {valor} será R$ {valorSimulacaoRendimentoCDB}, se aplicado em LCI durante {dataAplicacao.ToString("dd/MM/yyyy")} a {dataResgate.ToString("dd/MM/yyyy")}");
+            Console.WriteLine($"Valor de R$ {valor} será R$ {valorSimulacaoRendimentoCDB.ToString("0.00")}, se aplicado em LCI durante {dataAplicacao.ToString("dd/MM/yyyy")} a {dataResgate.ToString("dd/MM/yyyy")}");
         }
         public void AplicarLCI(string id, decimal valor)
         {
@@ -493,7 +568,7 @@ namespace M2P1.FintechApp
 
                 dataPrimeiroInvestimento = (DateTime)investimentos.FirstOrDefault().DataAplicacao;
 
-                if(((_contaRepository.RetornarData().Year - dataPrimeiroInvestimento.Year) * 12) + _contaRepository.RetornarData().Month - dataPrimeiroInvestimento.Month >= 6)
+                if (((_contaRepository.RetornarData().Year - dataPrimeiroInvestimento.Year) * 12) + _contaRepository.RetornarData().Month - dataPrimeiroInvestimento.Month >= 6)
                 {
                     conta.ResgatarLCI(valor);
 
@@ -503,7 +578,8 @@ namespace M2P1.FintechApp
                     _contaRepository.AdicionarTransacao(id, investimento);
 
                     Console.WriteLine($"Resgate na conta número/ID {id} de {conta.Nome}, no valor de R$ {valor}, realizada com sucesso!");
-                } else
+                }
+                else
                 {
                     Console.WriteLine($"Resgate não realizado. Tempo mínimo de 6 meses para LCI!");
                 }
@@ -602,30 +678,81 @@ namespace M2P1.FintechApp
             }
         }
 
+        public void TextoRetornarContas(IList<Conta> list)
+        {
+            string agencia = "";
+
+            Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-13}|{8,-15}|{9,-13}|{10,-13}|{11,-13}|{12,-13}|", "ID", "Tipo de conta", "Agencia", "Nome", "CPF", "Endereço", "Saldo", "Renda Mensal", "Cheque Especial", "Poupança", "LCI", "LCA", "CDB"));
+            Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-13}|{8,-15}|{9,-13}|{10,-13}|{11,-13}|{12,-13}|", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
+
+            foreach (dynamic conta in list)
+            {
+                switch (conta.Agencia)
+                {
+                    case AgenciaEnum.Florianopolis:
+                        agencia = "Florianópolis";
+                        break;
+                    case AgenciaEnum.Biguacu:
+                        agencia = "Biguaçu";
+                        break;
+                    case AgenciaEnum.SaoJose:
+                        agencia = "São José";
+                        break;
+                }
+
+                if (conta.GetType() == typeof(ContaCorrente))
+                {
+                    Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-13}|{8,-15}|{9,-13}|{10,-13}|{11,-13}|{12,-13}|", conta.Id, conta.TipoConta, agencia, conta.Nome, conta.CPF, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), conta.RetornarValorChequeEspecial().ToString("0.00"), "-", "-", "-", "-"));
+                }
+                if (conta.GetType() == typeof(ContaPoupanca))
+                {
+                    Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-13}|{8,-15}|{9,-13}|{10,-13}|{11,-13}|{12,-13}|", conta.Id, conta.TipoConta, agencia, conta.Nome, conta.CPF, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), "-", conta.RetornarValorPoupanca().ToString("0.00"), "-", "-", "-"));
+                }
+                if (conta.GetType() == typeof(ContaInvestimento))
+                {
+                    Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-13}|{8,-15}|{9,-13}|{10,-13}|{11,-13}|{12,-13}|", conta.Id, conta.TipoConta, agencia, conta.Nome, conta.CPF, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), "-", "-", conta.RetornarValorLCI().ToString("0.00"), conta.RetornarValorLCA().ToString("0.00"), conta.RetornarValorCDB().ToString("0.00")));
+                }
+            }
+        }
+
         public Type RetornarTipoConta(string id) => _contaRepository.RetornarDado(id).GetType();
         public void RetornarConta(string id)
         {
             dynamic conta = _contaRepository.RetornarDado(id);
 
+            string agencia = "";
             decimal valorPoupanca;
             decimal valorLCI;
             decimal valorLCA;
             decimal valorCDB;
 
-            Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-13}|{7,-15}|{8,-13}|{9,-13}|{10,-13}|{11,-13}|", "ID", "Tipo de conta", "Agencia", "Nome", "Endereço", "Saldo", "Renda Mensal", "Cheque Especial", "Poupança", "LCI", "LCA", "CDB"));
-            Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-13}|{7,-15}|{8,-13}|{9,-13}|{10,-13}|{11,-13}|", "", "", "", "", "", "", "", "", "", "", "", "", ""));
+            switch (conta.Agencia)
+            {
+                case AgenciaEnum.Florianopolis:
+                    agencia = "Florianópolis";
+                    break;
+                case AgenciaEnum.Biguacu:
+                    agencia = "Biguaçu";
+                    break;
+                case AgenciaEnum.SaoJose:
+                    agencia = "São José";
+                    break;
+            }
+
+            Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-13}|{8,-15}|{9,-13}|{10,-13}|{11,-13}|{12,-13}|", "ID", "Tipo de conta", "Agencia", "Nome", "CPF", "Endereço", "Saldo", "Renda Mensal", "Cheque Especial", "Poupança", "LCI", "LCA", "CDB"));
+            Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-13}|{8,-15}|{9,-13}|{10,-13}|{11,-13}|{12,-13}|", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
 
             if (conta.GetType() == typeof(ContaCorrente))
             {
-                Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-13}|{7,-15}|{8,-13}|{9,-13}|{10,-13}|{11,-13}|", conta.Id, conta.TipoConta, conta.Agencia, conta.Nome, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), conta.RetornarValorChequeEspecial().ToString("0.00"), "-", "-", "-", "-"));
+                Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-13}|{8,-15}|{9,-13}|{10,-13}|{11,-13}|{12,-13}|", conta.Id, conta.TipoConta, agencia, conta.Nome, conta.CPF, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), conta.RetornarValorChequeEspecial().ToString("0.00"), "-", "-", "-", "-"));
             }
             if (conta.GetType() == typeof(ContaPoupanca))
             {
-                Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-13}|{7,-15}|{8,-13}|{9,-13}|{10,-13}|{11,-13}|", conta.Id, conta.TipoConta, conta.Agencia, conta.Nome, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), "-", conta.RetornarValorPoupanca().ToString("0.00"), "-", "-", "-"));
+                Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-13}|{8,-15}|{9,-13}|{10,-13}|{11,-13}|{12,-13}|", conta.Id, conta.TipoConta, agencia, conta.Nome, conta.CPF, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), "-", conta.RetornarValorPoupanca().ToString("0.00"), "-", "-", "-"));
             }
             if (conta.GetType() == typeof(ContaInvestimento))
             {
-                Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-13}|{7,-15}|{8,-13}|{9,-13}|{10,-13}|{11,-13}|", conta.Id, conta.TipoConta, conta.Agencia, conta.Nome, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), "-", "-", conta.RetornarValorLCI().ToString("0.00"), conta.RetornarValorLCA().ToString("0.00"), conta.RetornarValorCDB().ToString("0.00")));
+                Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-15}|{7,-13}|{8,-15}|{9,-13}|{10,-13}|{11,-13}|{12,-13}|", conta.Id, conta.TipoConta, agencia, conta.Nome, conta.CPF, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), "-", "-", conta.RetornarValorLCI().ToString("0.00"), conta.RetornarValorLCA().ToString("0.00"), conta.RetornarValorCDB().ToString("0.00")));
             }
         }
         public void RetornarContas()
@@ -637,24 +764,7 @@ namespace M2P1.FintechApp
             decimal valorLCA;
             decimal valorCDB;
 
-            Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-13}|{7,-15}|{8,-13}|{9,-13}|{10,-13}|{11,-13}|", "ID", "Tipo de conta", "Agencia", "Nome", "Endereço", "Saldo", "Renda Mensal", "Cheque Especial", "Poupança", "LCI", "LCA", "CDB"));
-            Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-13}|{7,-15}|{8,-13}|{9,-13}|{10,-13}|{11,-13}|", "", "", "", "", "", "", "", "", "", "", "", "", ""));
-
-            foreach (dynamic conta in list)
-            {
-                if (conta.GetType() == typeof(ContaCorrente))
-                {
-                    Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-13}|{7,-15}|{8,-13}|{9,-13}|{10,-13}|{11,-13}|", conta.Id, conta.TipoConta, conta.Agencia, conta.Nome, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), conta.RetornarValorChequeEspecial().ToString("0.00"), "-", "-", "-", "-"));
-                }
-                if (conta.GetType() == typeof(ContaPoupanca))
-                {
-                    Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-13}|{7,-15}|{8,-13}|{9,-13}|{10,-13}|{11,-13}|", conta.Id, conta.TipoConta, conta.Agencia, conta.Nome, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), "-", conta.RetornarValorPoupanca().ToString("0.00"), "-", "-", "-"));
-                }
-                if (conta.GetType() == typeof(ContaInvestimento))
-                {
-                    Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-13}|{7,-15}|{8,-13}|{9,-13}|{10,-13}|{11,-13}|", conta.Id, conta.TipoConta, conta.Agencia, conta.Nome, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), "-", "-", conta.RetornarValorLCI().ToString("0.00"), conta.RetornarValorLCA().ToString("0.00"), conta.RetornarValorCDB().ToString("0.00")));
-                }
-            }
+            TextoRetornarContas(list);
         }
         public void RetornarSaldoConta(string id)
         {
@@ -676,7 +786,7 @@ namespace M2P1.FintechApp
                 }
                 if (transacao.GetType() == typeof(Investimento))
                 {
-                    if(transacao.DataAplicacao == null)
+                    if (transacao.DataAplicacao == null)
                     {
                         Console.WriteLine($"Tipo: {transacao.TipoTransacao}, Descrição: {transacao.Descricao}, Valor: R$ {transacao.Valor}, Tipo: {transacao.TipoAplicacao}, Data Resgate: {transacao.DataResgate.ToString("dd/MM/yyyy")}");
                     }
@@ -684,7 +794,7 @@ namespace M2P1.FintechApp
                     {
                         Console.WriteLine($"Tipo: {transacao.TipoTransacao}, Descrição: {transacao.Descricao}, Valor: R$ {transacao.Valor}, Tipo: {transacao.TipoAplicacao}, Data Aplicacão: {transacao.DataAplicacao.ToString("dd/MM/yyyy")}");
                     }
-                    
+
                 }
             }
 
@@ -704,47 +814,13 @@ namespace M2P1.FintechApp
         {
             IList<Conta> list = _contaRepository.RetornarContasPorTipo(tipoConta);
 
-            Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-13}|{7,-15}|{8,-13}|{9,-13}|{10,-13}|{11,-13}|", "ID", "Tipo de conta", "Agencia", "Nome", "Endereço", "Saldo", "Renda Mensal", "Cheque Especial", "Poupança", "LCI", "LCA", "CDB"));
-            Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-13}|{7,-15}|{8,-13}|{9,-13}|{10,-13}|{11,-13}|", "", "", "", "", "", "", "", "", "", "", "", "", ""));
-
-            foreach (dynamic conta in list)
-            {
-                if (conta.GetType() == typeof(ContaCorrente))
-                {
-                    Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-13}|{7,-15}|{8,-13}|{9,-13}|{10,-13}|{11,-13}|", conta.Id, conta.TipoConta, conta.Agencia, conta.Nome, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), conta.RetornarValorChequeEspecial().ToString("0.00"), "-", "-", "-", "-"));
-                }
-                if (conta.GetType() == typeof(ContaPoupanca))
-                {
-                    Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-13}|{7,-15}|{8,-13}|{9,-13}|{10,-13}|{11,-13}|", conta.Id, conta.TipoConta, conta.Agencia, conta.Nome, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), "-", conta.RetornarValorPoupanca().ToString("0.00"), "-", "-", "-"));
-                }
-                if (conta.GetType() == typeof(ContaInvestimento))
-                {
-                    Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-13}|{7,-15}|{8,-13}|{9,-13}|{10,-13}|{11,-13}|", conta.Id, conta.TipoConta, conta.Agencia, conta.Nome, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), "-", "-", conta.RetornarValorLCI().ToString("0.00"), conta.RetornarValorLCA().ToString("0.00"), conta.RetornarValorCDB().ToString("0.00")));
-                }
-            }
+            TextoRetornarContas(list);
         }
         public void RetornarContasSaldoNegativo()
         {
             IList<Conta> list = _contaRepository.RetornarContasSaldoNegativo();
 
-            Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-13}|{7,-15}|{8,-13}|{9,-13}|{10,-13}|{11,-13}|", "ID", "Tipo de conta", "Agencia", "Nome", "Endereço", "Saldo", "Renda Mensal", "Cheque Especial", "Poupança", "LCI", "LCA", "CDB"));
-            Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-13}|{7,-15}|{8,-13}|{9,-13}|{10,-13}|{11,-13}|", "", "", "", "", "", "", "", "", "", "", "", "", ""));
-
-            foreach (dynamic conta in list)
-            {
-                if (conta.GetType() == typeof(ContaCorrente))
-                {
-                    Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-13}|{7,-15}|{8,-13}|{9,-13}|{10,-13}|{11,-13}|", conta.Id, conta.TipoConta, conta.Agencia, conta.Nome, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), conta.RetornarValorChequeEspecial().ToString("0.00"), "-", "-", "-", "-"));
-                }
-                if (conta.GetType() == typeof(ContaPoupanca))
-                {
-                    Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-13}|{7,-15}|{8,-13}|{9,-13}|{10,-13}|{11,-13}|", conta.Id, conta.TipoConta, conta.Agencia, conta.Nome, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), "-", conta.RetornarValorPoupanca().ToString("0.00"), "-", "-", "-"));
-                }
-                if (conta.GetType() == typeof(ContaInvestimento))
-                {
-                    Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}|{6,-13}|{7,-15}|{8,-13}|{9,-13}|{10,-13}|{11,-13}|", conta.Id, conta.TipoConta, conta.Agencia, conta.Nome, conta.Endereco, conta.Saldo().ToString("0.00"), conta.RendaMensal.ToString("0.00"), "-", "-", conta.RetornarValorLCI().ToString("0.00"), conta.RetornarValorLCA().ToString("0.00"), conta.RetornarValorCDB().ToString("0.00")));
-                }
-            }
+            TextoRetornarContas(list);
         }
         public void RetornarTotalInvestido()
         {

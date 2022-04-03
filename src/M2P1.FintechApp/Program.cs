@@ -98,6 +98,14 @@ void CriarConta()
     nome = Console.ReadLine();
     Console.WriteLine("Digite seu CPF:");
     cpf = Console.ReadLine();
+    
+    if(_fintechApp.VerificaCPF(cpf) == false)
+    {
+        Console.Clear();
+        Console.WriteLine("CPF inválido!");
+        MenuPrincipal();
+    }
+
     Console.WriteLine("Digite seu endereço:");
     endereco = Console.ReadLine();
     Console.WriteLine("Digite sua renda mensal:");
@@ -489,6 +497,7 @@ void SimularInvestimento(string id)
 {
     string opcao;
     decimal valor;
+    int tipoAplicacao;
 
     Console.WriteLine("Digite o valor da simulação:");
     if (Decimal.TryParse(Console.ReadLine(), out valor))
@@ -512,12 +521,18 @@ void SimularInvestimento(string id)
                 {
                     case "1":
                         _fintechApp.SimularRendimentoLCI(id, valor, dataAplicacao, dataResgate);
+                        tipoAplicacao = 1;
+                        aplicarSimulacao(tipoAplicacao);
                         break;
                     case "2":
                         _fintechApp.SimularRendimentoLCA(id, valor, dataAplicacao, dataResgate);
+                        tipoAplicacao = 2;
+                        aplicarSimulacao(tipoAplicacao);
                         break;
                     case "3":
                         _fintechApp.SimularRendimentoCDB(id, valor, dataAplicacao, dataResgate);
+                        tipoAplicacao = 3;
+                        aplicarSimulacao(tipoAplicacao);
                         break;
                     case "4":
                         MenuPrincipal();
@@ -529,6 +544,35 @@ void SimularInvestimento(string id)
         }
 
         MenuPrincipal();
+
+        void aplicarSimulacao(int tipoAplicacao)
+        {
+            Console.WriteLine("{0}{1}{2}{3}{4}{5}{6}", Environment.NewLine, "Deseja apliacar o investimento simulado?", Environment.NewLine, "1 - Sim", Environment.NewLine, "2 - Não", Environment.NewLine);
+            opcao = Console.ReadLine();
+
+            Console.Clear();
+
+            switch (opcao)
+            {
+                case "1":
+                    switch (tipoAplicacao)
+                    {
+                        case 1:
+                            _fintechApp.AplicarLCI(id, valor);
+                            break;
+                        case 2:
+                            _fintechApp.AplicarLCA(id, valor);
+                            break;
+                        case 3:
+                            _fintechApp.AplicarCDB(id, valor);
+                            break;
+                    }
+                    break;
+                case "2":
+                    MenuPrincipal();
+                    break;
+            }
+        }
     }
     else
     {
